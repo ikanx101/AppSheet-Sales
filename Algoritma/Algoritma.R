@@ -76,36 +76,36 @@ data_3 = data_3 %>% split(.,.$id)
 
 
 # ===============================================
-# ide dasarnya seperti ini
+# ide dasarnya seperti ini:
+# ini data profil toko
 tes = data.frame(id = 1,
                  nama = "ikang"
                 )
-
+# ini data gimmick
 tes_2 = data.frame(id = 1,x = 3:9,y = 3:9)
-
+# ini data jualan
 tes_3 = data.frame(id = 1,z = 1:2, f = 4:5)
 
-tes
-tes_2
-tes_3
-
+# kita merge dulu masing2 data gimmick dengan data profilnya
 dr_1 = merge(tes,tes_2)
 dr_2 = merge(tes,tes_3)
 
+# kita cek berapa banyak baris dari kedua data hasil mergenya
 m1 = nrow(dr_1)
 m2 = nrow(dr_2)
 
-library(tidyr)
-library(dplyr)
-
+# dari banyak baris tersebut terlihat, siapa yang harus ditambahkan agar proses penempelan berikutnya sesuai
+# saya menggunakan perintah cbind() untuk menempel kedua dataset
 if(m1<m2){
-dr_1[(m2-m1):m2,] = NA
-dr_1= dr_1%>% fill(id,nama) %>% select(-id,-nama)
-final = cbind(dr_2,dr_1)
+  dr_1[(m2-m1):m2,] = NA
+  dr_1= dr_1%>% fill(id,nama) %>% select(-id,-nama)
+  final = cbind(dr_2,dr_1)
 } else if(m1>m2){
-dr_2[(m1-m2):m1,] = NA
-dr_2 = dr_2 %>% fill(id,nama) %>% select(-id,-nama)
-final = cbind(dr_1,dr_2)
+  dr_2[(m1-m2):m1,] = NA
+  dr_2 = dr_2 %>% fill(id,nama) %>% select(-id,-nama)
+  final = cbind(dr_1,dr_2)
 }
 
+# hasil akhir
+# PR nya selanjutnya tinggal mengubah urutan saja ya
 final

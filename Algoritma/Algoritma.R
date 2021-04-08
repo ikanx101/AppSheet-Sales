@@ -43,5 +43,8 @@ data = data %>% select(-contains("gimmick"))
 data_3 = data %>% select(-starts_with("pg"),
                          -starts_with("sec"),
                          -contains("omzet"),
-                         -transaksi_penjualan)
+                         -transaksi_penjualan,
+                         -ns_tea_sweet_tea,
+                         -ns_wdank_bajigur,
+                         -ns_wdank_kopi_bajigur)
 colnames(data)

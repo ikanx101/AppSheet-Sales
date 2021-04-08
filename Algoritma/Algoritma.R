@@ -40,8 +40,8 @@ data_2 = data %>% select(id,contains("gimmick"))
 data = data %>% select(-contains("gimmick"))
 
 # ketiganya sisanya
-data = data %>% select(-starts_with("pg"),
-                       -starts_with("sec"),
-                       -contains("omzet"),
-                       -transaksi_penjualan)
+data_3 = data %>% select(-starts_with("pg"),
+                         -starts_with("sec"),
+                         -contains("omzet"),
+                         -transaksi_penjualan)
 colnames(data)

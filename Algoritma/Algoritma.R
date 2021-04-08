@@ -1,21 +1,41 @@
-setwd("~/Documents/AppSheet-Sales/Algoritma")
+#setwd("~/Documents/AppSheet-Sales/Algoritma")
+setwd("/cloud/project/Algoritma")
 
+rm(list=ls())
 library(readxl)
 library(dplyr)
 library(tidyr)
 
-nama_file = "~/Documents/AppSheet-Sales/Damen/Convert Data Appsheet.xlsx"
+#nama_file = "~/Documents/AppSheet-Sales/Damen/Convert Data Appsheet.xlsx"
+nama_file = "/cloud/project/Damen/Convert Data Appsheet.xlsx"
+
+# extract nama sheets
 shits = excel_sheets(nama_file)
 
+# extract database produk
 dbase = read_excel(nama_file,
                    sheet = shits[3]) %>% 
   janitor::clean_names() %>% 
-  mutate(item = janitor::make_clean_names(item))
+  mutate(item_standar = janitor::make_clean_names(item),
+         brand = ifelse(brand == "TS","Tropicana Slim",brand),
+         brand = ifelse(brand == "NS","NutriSari",brand))
 
-before = read_excel(nama_file,
-                    sheet = shits[1]) %>% 
+# extract data target utama
+data = read_excel(nama_file,
+                  sheet = shits[1]) %>% 
   janitor::clean_names()
 
-header_before = colnames(before)
-item_yg_ada = dbase$item
-marker_non_item = header_before[!header_before %in% item_yg_ada]
+# ambil informasi yang diperlukan
+header_data = colnames(data)
+nama_item = dbase$item_standar
+item_yg_dijual = header_data[header_data %in% nama_item]
+
+# kita bagi-bagi datanya berdasarkan informasi yang ada
+# pertama dari produk
+data_1 = 
+  
+
+# kedua dari gimmick
+# ketiganya sisanya
+
+

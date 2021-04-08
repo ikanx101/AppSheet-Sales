@@ -1,17 +1,23 @@
+# jangan lupa ganti working directory
 #setwd("~/Documents/AppSheet-Sales/Algoritma")
-setwd("/cloud/project/Algoritma")
 
+# ========================
+# start
 rm(list=ls())
 library(readxl)
 library(dplyr)
 library(tidyr)
 
+# ========================
+# jangan lupa ganti path file
 #nama_file = "~/Documents/AppSheet-Sales/Damen/Convert Data Appsheet.xlsx"
 nama_file = "/cloud/project/Damen/Convert Data Appsheet.xlsx"
 
+# ========================
 # extract nama sheets
 shits = excel_sheets(nama_file)
 
+# ========================
 # extract database produk
 dbase = read_excel(nama_file,
                    sheet = shits[3]) %>% 
@@ -20,16 +26,20 @@ dbase = read_excel(nama_file,
          brand = ifelse(brand == "TS","Tropicana Slim",brand),
          brand = ifelse(brand == "NS","NutriSari",brand))
 
+# ========================
 # extract data target utama
 data = read_excel(nama_file,
                   sheet = shits[1]) %>% 
   janitor::clean_names()
 
+# ========================
 # ambil informasi yang diperlukan
 header_data = colnames(data)
 nama_item = dbase$item_standar
 item_yg_dijual = header_data[header_data %in% nama_item]
 
+# ========================
+# ========================
 # kita bagi-bagi datanya berdasarkan informasi yang ada
 # pertama dari produk
 data_1 = data[colnames(data) %in% c("id",item_yg_dijual)]
@@ -47,4 +57,17 @@ data_3 = data %>% select(-starts_with("pg"),
                          -ns_tea_sweet_tea,
                          -ns_wdank_bajigur,
                          -ns_wdank_kopi_bajigur)
-colnames(data)
+
+# ========================
+# ========================
+# proses pengerjaannya mungkin akan rumit. kenapa? 
+# kalau kita lihat di sheet after, banyaknya baris akan tergantung dari banyaknya baris yang ada di gimmick dan produk yang terjual.
+# maka dari itu, lebih baik semua data dbuat dalam bentuk list saja.
+# nanti tinggal ditempel saja ke kanan.
+data_1 = data_1 %>% split(.,.$id)
+data_2 = data_2 %>% split(.,.$id)
+data_3 = data_3 %>% split(.,.$id)
+
+# sekarang kita akan kerjakan yang data_2
+# kita rapikan gimmick
+# rules: saat tidak ada gimmick, maka sisanya dbuat nol alias NA

@@ -72,6 +72,9 @@ data_3 = data_3 %>% split(.,.$id)
 # kita rapikan gimmick
 # rules: saat tidak ada gimmick, maka sisanya dbuat nol alias NA
 
+
+
+
 # ===============================================
 # ide dasarnya seperti ini
 tes = data.frame(id = 1,
@@ -89,16 +92,20 @@ tes_3
 dr_1 = merge(tes,tes_2)
 dr_2 = merge(tes,tes_3)
 
-dr_1
-dr_2
-
 m1 = nrow(dr_1)
 m2 = nrow(dr_2)
 
+library(tidyr)
+library(dplyr)
+
 if(m1<m2){
 dr_1[(m2-m1):m2,] = NA
+dr_1= dr_1%>% fill(id,nama) %>% select(-id,-nama)
+final = cbind(dr_2,dr_1)
 } else if(m1>m2){
 dr_2[(m1-m2):m1,] = NA
+dr_2 = dr_2 %>% fill(id,nama) %>% select(-id,-nama)
+final = cbind(dr_1,dr_2)
 }
 
-dr_2
+final

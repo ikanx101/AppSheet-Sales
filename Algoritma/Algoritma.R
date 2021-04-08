@@ -32,10 +32,13 @@ item_yg_dijual = header_data[header_data %in% nama_item]
 
 # kita bagi-bagi datanya berdasarkan informasi yang ada
 # pertama dari produk
-data_1 = 
-  
+data_1 = data[colnames(data) %in% c("id",item_yg_dijual)]
+data = data[!colnames(data) %in% item_yg_dijual]
 
 # kedua dari gimmick
+data_2 = data %>% select(id,contains("gimmick"))
+data = data %>% select(-contains("gimmick"))
+
 # ketiganya sisanya
 
 

@@ -71,3 +71,34 @@ data_3 = data_3 %>% split(.,.$id)
 # sekarang kita akan kerjakan yang data_2
 # kita rapikan gimmick
 # rules: saat tidak ada gimmick, maka sisanya dbuat nol alias NA
+
+# ===============================================
+# ide dasarnya seperti ini
+tes = data.frame(id = 1,
+                 nama = "ikang"
+                )
+
+tes_2 = data.frame(id = 1,x = 3:9,y = 3:9)
+
+tes_3 = data.frame(id = 1,z = 1:2, f = 4:5)
+
+tes
+tes_2
+tes_3
+
+dr_1 = merge(tes,tes_2)
+dr_2 = merge(tes,tes_3)
+
+dr_1
+dr_2
+
+m1 = nrow(dr_1)
+m2 = nrow(dr_2)
+
+if(m1<m2){
+dr_1[(m2-m1):m2,] = NA
+} else if(m1>m2){
+dr_2[(m1-m2):m1,] = NA
+}
+
+dr_2

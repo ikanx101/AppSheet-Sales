@@ -1,5 +1,5 @@
 # jangan lupa ganti working directory
-#setwd("~/Documents/AppSheet-Sales/Algoritma")
+setwd("D:/AppSheet-Sales/Algoritma")
 
 # ========================
 # start
@@ -7,11 +7,12 @@ rm(list=ls())
 library(readxl)
 library(dplyr)
 library(tidyr)
+library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
 #nama_file = "~/Documents/AppSheet-Sales/Damen/Convert Data Appsheet.xlsx"
-nama_file = "/cloud/project/Damen/Convert Data Appsheet.xlsx"
+nama_file = "D:/AppSheet-Sales/Damen/Convert Data Appsheet.xlsx"
 
 # ========================
 # extract nama sheets
@@ -68,44 +69,82 @@ data_1 = data_1 %>% split(.,.$id)
 data_2 = data_2 %>% split(.,.$id)
 data_3 = data_3 %>% split(.,.$id)
 
+# kita siapkan rumahnya dulu
+ikanx = vector("list",length(data_1))
+
+# sekarang kita mulai dari i = 1
+i = 2
+
+temp_1 = data_1[[i]] %>% as.data.frame()
+temp_2 = data_2[[i]] %>% as.data.frame()
+temp_3 = data_3[[i]] %>% as.data.frame()
+
 # sekarang kita akan kerjakan yang data_2
 # kita rapikan gimmick
 # rules: saat tidak ada gimmick, maka sisanya dbuat nol alias NA
-
-
-
-
-# ===============================================
-# ide dasarnya seperti ini:
-# ini data profil toko
-tes = data.frame(id = 1,
-                 nama = "ikang"
-                )
-# ini data gimmick
-tes_2 = data.frame(id = 1,x = 3:9,y = 3:9)
-# ini data jualan
-tes_3 = data.frame(id = 1,z = 1:2, f = 4:5)
-
-# kita merge dulu masing2 data gimmick dengan data profilnya
-dr_1 = merge(tes,tes_2)
-dr_2 = merge(tes,tes_3)
-
-# kita cek berapa banyak baris dari kedua data hasil mergenya
-m1 = nrow(dr_1)
-m2 = nrow(dr_2)
-
-# dari banyak baris tersebut terlihat, siapa yang harus ditambahkan agar proses penempelan berikutnya sesuai
-# saya menggunakan perintah cbind() untuk menempel kedua dataset
-if(m1<m2){
-  dr_1[(m2-m1):m2,] = NA
-  dr_1= dr_1%>% fill(id,nama) %>% select(-id,-nama)
-  final = cbind(dr_2,dr_1)
-} else if(m1>m2){
-  dr_2[(m1-m2):m1,] = NA
-  dr_2 = dr_2 %>% fill(id,nama) %>% select(-id,-nama)
-  final = cbind(dr_1,dr_2)
+if(temp_2$pemberian_gimmick == "Ada"){
+  temp_2 = 
+    temp_2 %>% 
+    melt(id.vars = c("id","pemberian_gimmick")) %>% 
+    mutate(variable = ifelse(grepl("item",variable),
+                             "item_gimmick",
+                             "qty_gimmick")
+    )
+  temp_2_1 = 
+    temp_2 %>% 
+    filter(grepl("item",variable)) %>% 
+    select(-variable) %>% 
+    rename(item_gimmick = value)
+  temp_2_2 = 
+    temp_2 %>% 
+    filter(grepl("qty",variable)) %>% 
+    select(-variable) %>% 
+    rename(qty_gimmick = value) %>% 
+    select(qty_gimmick)
+  temp_2 = cbind(temp_2_1,temp_2_2)
+} else {
+  temp_2 = data.frame(
+    id = temp_2$id,
+    pemberian_gimmick = temp_2$pemberian_gimmick,
+    item_gimmick = NA,
+    qty_gimmick = NA
+  )
 }
 
-# hasil akhir
-# PR nya selanjutnya tinggal mengubah urutan saja ya
-final
+# sekarang kita akan kerjakan yang data_1
+# item penjualan kita buat tabular
+temp_1 = 
+  temp_1 %>% 
+  melt(id.vars = "id") %>% 
+  filter(!is.na(value)) %>% 
+  rename(item_standar = variable) %>% 
+  merge(dbase) %>% 
+  mutate(omzet = value*harga) %>% 
+  select(-item_standar) %>% 
+  rename(qty_penjualan = value,
+         item_penjualan = item) %>% 
+  relocate(id,item_penjualan,brand,qty_penjualan,harga,omzet)
+
+# sekarang saatnya moment of truth
+m1 = nrow(temp_1)
+m2 = nrow(temp_2)
+m3 = nrow(temp_3)
+
+max_m = max(c(m1,m2,m3))
+
+if(m1 < max_m){
+  temp_1[(m1+1):max_m,] = NA
+}
+if(m2 < max_m){
+  temp_2[(m2+1):max_m,] = NA
+}
+if(m3 < max_m){
+  temp_3[(m3+1):max_m,] = temp_3[1,]
+}
+
+temp_1$id = NULL
+temp_2$id = NULL
+temp_3$id = NULL
+
+final = cbind(temp_3,temp_2,temp_1)
+ikanx[[i]] = final

@@ -11,13 +11,21 @@ library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
-nama_file = "D:/AppSheet-Sales/Damen/Template.xlsx"
-load("D:/AppSheet-Sales/Damen/dbase_product.rda")
+nama_file_utama = "D:/AppSheet-Sales/Damen/Template.xlsx"
+nama_file_harga = "D:/AppSheet-Sales/Damen/Template Harga.xlsx"
 
 # ========================
 # extract data target utama
-data = read_excel(nama_file) %>% 
+data = read_excel(nama_file_utama) %>% 
   janitor::clean_names()
+
+# ========================
+# extract database produk
+dbase = read_excel(nama_file_harga) %>% 
+  janitor::clean_names() %>% 
+  mutate(item_standar = janitor::make_clean_names(item),
+         brand = ifelse(brand == "TS","Tropicana Slim",brand),
+         brand = ifelse(brand == "NS","NutriSari",brand))
 
 # ========================
 # ambil informasi yang diperlukan

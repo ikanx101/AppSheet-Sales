@@ -1,0 +1,13 @@
+name: AppSheetConverter
+title: AppSheetConverter
+username:
+account: ikanx
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 3952722
+bundleId: 4463580
+url: https://ikanx.shinyapps.io/AppSheetConverter/
+when: 1618278736.91082
+lastSyncTime: 1618278736.91086
+asMultiple: FALSE
+asStatic: FALSE

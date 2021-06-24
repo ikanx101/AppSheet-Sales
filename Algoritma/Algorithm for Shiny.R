@@ -11,8 +11,8 @@ library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
-nama_file_utama = "~/Documents/AppSheet-Sales/Template.xlsx"
-nama_file_harga = "~/Documents/AppSheet-Sales/Template Harga.xlsx"
+nama_file_utama = "~/Documents/AppSheet-Sales/Damen/Call & Omzet.xlsx"
+nama_file_harga = "~/Documents/AppSheet-Sales/Damen/Template Harga NEW.xlsx"
 
 # ========================
 # extract data target utama
@@ -21,7 +21,8 @@ data = read_excel(nama_file_utama) %>%
 
 # ========================
 # extract database produk
-dbase = read_excel(nama_file_harga) %>% 
+dbase = read_excel(nama_file_harga,
+                   col_types = c("text", "text", "numeric")) %>% 
   janitor::clean_names() %>% 
   mutate(item_standar = janitor::make_clean_names(item),
          brand = ifelse(brand == "TS","Tropicana Slim",brand),

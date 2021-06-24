@@ -1,9 +1,10 @@
 # =======================================
 # ikanx101.com
 # produly presents
-# AppSheet Sales Converter v1.0
+# AppSheet Sales Converter v2.0
 # =======================================
 
+# alamatnya di: https://ikanx.shinyapps.io/AppSheetConverter
 
 
 # =======================================
@@ -45,14 +46,14 @@ isi = fluidRow(column(width = 8,
                       tags$a(href="https://github.com/ikanx101/AppSheet-Sales/raw/main/Damen/Template%20Harga.xlsx", "Template database harga produk."),
                       h4("Jika terjadi kendala dan pertanyaan silakan hubungi saya di rizka.fadhli@nutrifood.co.id"),
                       h5("Dibuat menggunakan R Studio"),
-                      h6("Last update: 13 April 2021 08.00 WIB")
+                      h6("Last update: 24 Juni 2021 10:44 WIB")
                       ),
                column(width = 4,
                       h3("== Converter =="),
                       h4("Silakan upload files Anda:"),
                       fileInput('nama_file_utama', 'Pilih file: raw data AppSheet'),
                       fileInput('nama_file_harga', 'Pilih file: database harga'),
-                      h4("Harap tunggu 10-20 detik untuk proses di server."),
+                      h4("Harap tunggu 30-40 detik untuk proses di server."),
                       h5(textOutput("currentTime")),
                       downloadButton("downloadData", "Download Converted Data")
                       )
@@ -100,7 +101,8 @@ server <- function(input, output, session) {
         
         # extract database produk
         dbase = 
-            read_excel(input$nama_file_harga$datapath) %>% 
+            read_excel(input$nama_file_harga$datapath,
+                       col_types = c("text", "text", "numeric")) %>% 
             janitor::clean_names() %>% 
             mutate(item_standar = janitor::make_clean_names(item),
                    brand = ifelse(brand == "TS","Tropicana Slim",brand),

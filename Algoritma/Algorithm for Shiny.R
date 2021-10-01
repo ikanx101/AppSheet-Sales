@@ -11,8 +11,8 @@ library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
-nama_file_utama = "~/Documents/AppSheet-Sales/Damen/Call & Omzet.xlsx"
-nama_file_harga = "~/Documents/AppSheet-Sales/Damen/Template Harga NEW.xlsx"
+nama_file_utama = "~/Documents/AppSheet-Sales/Damen/Call & Omzet SETP - Copy.xlsx"
+nama_file_harga = "~/Documents/AppSheet-Sales/Damen/Template Harga.xlsx"
 
 # ========================
 # extract data target utama
@@ -51,8 +51,7 @@ data_3 = data %>% select(-starts_with("pg"),
                          -contains("omzet"),
                          -transaksi_penjualan,
                          -ns_tea_sweet_tea,
-                         -ns_wdank_bajigur,
-                         -ns_wdank_kopi_bajigur)
+                         -ns_wdank_bajigur)
 
 # ========================
 # ========================

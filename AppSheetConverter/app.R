@@ -34,7 +34,7 @@ credentials = data.frame(
 
 # =======================================
 # user interface
-title_pane = titlePanel("AppSheet Converter v1.0")
+title_pane = titlePanel("AppSheet Converter v1.1")
 isi = fluidRow(column(width = 8,
                       h3("== Read Me! =="),
                       h4("Web apps converter ini digunakan untuk mengubah raw data AppSheet ke format yang dibutuhkan."),
@@ -131,8 +131,7 @@ server <- function(input, output, session) {
                                  -contains("omzet"),
                                  -transaksi_penjualan,
                                  -ns_tea_sweet_tea,
-                                 -ns_wdank_bajigur,
-                                 -ns_wdank_kopi_bajigur)
+                                 -ns_wdank_bajigur)
         
         # ========================
         # ========================

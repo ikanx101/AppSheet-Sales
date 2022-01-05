@@ -15,7 +15,7 @@ library(dplyr)
 library(tidyr)
 library(reshape2)
 library(shiny)
-library(shinymanager)
+#library(shinymanager) # nemu error hilangnya icon sign out
 # =======================================
 
 
@@ -34,7 +34,7 @@ credentials = data.frame(
 
 # =======================================
 # user interface
-title_pane = titlePanel("AppSheet Converter v1.1")
+title_pane = titlePanel("AppSheet Converter v1.5")
 isi = fluidRow(column(width = 8,
                       h3("== Read Me! =="),
                       h4("Web apps converter ini digunakan untuk mengubah raw data AppSheet ke format yang dibutuhkan."),
@@ -61,7 +61,7 @@ isi = fluidRow(column(width = 8,
 
 # membuat user interface menjadi hidup
 ui = fluidPage(title_pane,isi)
-ui = secure_app(ui)
+#ui = secure_app(ui)
 # =======================================
 
 
@@ -75,9 +75,9 @@ server <- function(input, output, session) {
     
     # =======================================
     # check credential dulu gaes
-    res_auth <- secure_server(
-        check_credentials = check_credentials(credentials)
-    )
+    #res_auth <- secure_server(
+    #    check_credentials = check_credentials(credentials)
+    #)
     # =======================================
     
     

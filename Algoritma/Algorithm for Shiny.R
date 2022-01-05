@@ -1,5 +1,5 @@
 # jangan lupa ganti working directory
-setwd("~/AppSheet-Sales/Algoritma")
+setwd("~/Documents/AppSheet-Sales/Algoritma")
 
 # ========================
 # start
@@ -11,8 +11,8 @@ library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
-nama_file_utama = "~/AppSheet-Sales/Damen/Call & Omzet - Copy (2).xlsx"
-nama_file_harga = "~/AppSheet-Sales/Damen/Template Harga (1).xlsx"
+nama_file_utama = "~/Documents/AppSheet-Sales/Damen/Call & Omzet - Copy (2).xlsx"
+nama_file_harga = "~/Documents/AppSheet-Sales/Damen/Template Harga (1).xlsx"
 
 # ========================
 # extract data target utama

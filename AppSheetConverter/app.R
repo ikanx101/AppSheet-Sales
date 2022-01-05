@@ -46,7 +46,7 @@ isi = fluidRow(column(width = 8,
                       tags$a(href="https://github.com/ikanx101/AppSheet-Sales/raw/main/Damen/Template%20Harga.xlsx", "Template database harga produk."),
                       h4("Jika terjadi kendala dan pertanyaan silakan hubungi saya di rizka.fadhli@nutrifood.co.id"),
                       h5("Dibuat menggunakan R Studio"),
-                      h6("Last update: 24 Juni 2021 10:44 WIB")
+                      h6("Last update: 5 Januari 2022 10:30 WIB")
                       ),
                column(width = 4,
                       h3("== Converter =="),
@@ -130,7 +130,6 @@ server <- function(input, output, session) {
                                  -starts_with("sec"),
                                  -contains("omzet"),
                                  -transaksi_penjualan,
-                                 -ns_tea_sweet_tea,
                                  -ns_wdank_bajigur)
         
         # ========================

@@ -1,5 +1,5 @@
 # jangan lupa ganti working directory
-setwd("~/Documents/AppSheet-Sales/Algoritma")
+setwd("~/AppSheet-Sales/Algoritma")
 
 # ========================
 # start
@@ -11,13 +11,12 @@ library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
-nama_file_utama = "~/Documents/AppSheet-Sales/Damen/Call & Omzet - Copy (2).xlsx"
-nama_file_harga = "~/Documents/AppSheet-Sales/Damen/Template Harga (1).xlsx"
+nama_file_utama = "Call &amp; Omzet (5).xlsx"
+nama_file_harga = "Template Harga (2).xlsx"
 
 # ========================
 # extract data target utama
-data = read_excel(nama_file_utama) %>% 
-  janitor::clean_names()
+data = read_excel(nama_file_utama) %>% janitor::clean_names()
 
 # ========================
 # extract database produk
@@ -49,8 +48,7 @@ data = data %>% select(-contains("gimmick"))
 data_3 = data %>% select(-starts_with("pg"),
                          -starts_with("sec"),
                          -contains("omzet"),
-                         -transaksi_penjualan,
-                         -ns_wdank_bajigur)
+                         -transaksi_penjualan)
 
 # ========================
 # ========================

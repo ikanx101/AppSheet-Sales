@@ -34,7 +34,7 @@ credentials = data.frame(
 
 # =======================================
 # user interface
-title_pane = titlePanel("AppSheet Converter v1.5")
+title_pane = titlePanel("AppSheet Converter v1.52")
 isi = fluidRow(column(width = 8,
                       h3("== Read Me! =="),
                       h4("Web apps converter ini digunakan untuk mengubah raw data AppSheet ke format yang dibutuhkan."),
@@ -46,7 +46,7 @@ isi = fluidRow(column(width = 8,
                       tags$a(href="https://github.com/ikanx101/AppSheet-Sales/raw/main/Damen/Template%20Harga.xlsx", "Template database harga produk."),
                       h4("Jika terjadi kendala dan pertanyaan silakan hubungi saya di rizka.fadhli@nutrifood.co.id"),
                       h5("Dibuat menggunakan R Studio"),
-                      h6("Last update: 5 Januari 2022 10:30 WIB")
+                      h6("Last update: 7 Maret 2023 11:53 WIB")
                       ),
                column(width = 4,
                       h3("== Converter =="),
@@ -100,13 +100,12 @@ server <- function(input, output, session) {
             janitor::clean_names()
         
         # extract database produk
-        dbase = 
-            read_excel(input$nama_file_harga$datapath,
-                       col_types = c("text", "text", "numeric")) %>% 
-            janitor::clean_names() %>% 
-            mutate(item_standar = janitor::make_clean_names(item),
-                   brand = ifelse(brand == "TS","Tropicana Slim",brand),
-                   brand = ifelse(brand == "NS","NutriSari",brand))
+        dbase = read_excel(nama_file_harga,
+                           col_types = c("text", "text", "numeric")) %>% 
+          janitor::clean_names() %>% 
+          mutate(item_standar = janitor::make_clean_names(item),
+                 brand = ifelse(brand == "TS","Tropicana Slim",brand),
+                 brand = ifelse(brand == "NS","NutriSari",brand))
         
         # ========================
         # ambil informasi yang diperlukan
@@ -129,8 +128,7 @@ server <- function(input, output, session) {
         data_3 = data %>% select(-starts_with("pg"),
                                  -starts_with("sec"),
                                  -contains("omzet"),
-                                 -transaksi_penjualan,
-                                 -ns_wdank_bajigur)
+                                 -transaksi_penjualan)
         
         # ========================
         # ========================
@@ -147,87 +145,89 @@ server <- function(input, output, session) {
         
         # sekarang kita mulai looping dari i = 1 sampai selesai
         for(i in 1: length(data_1)){
-            temp_1 = data_1[[i]] %>% as.data.frame()
-            temp_2 = data_2[[i]] %>% as.data.frame()
-            temp_3 = data_3[[i]] %>% as.data.frame()
-            
-            # sekarang kita akan kerjakan yang data_2
-            # kita rapikan gimmick
-            # rules: saat tidak ada gimmick, maka sisanya dbuat nol alias NA
-            if(temp_2$pemberian_gimmick == "Ada"){
-                temp_2 = 
-                    temp_2 %>% 
-                    melt(id.vars = c("id","pemberian_gimmick")) %>% 
-                    mutate(variable = ifelse(grepl("item",variable),
-                                             "item_gimmick",
-                                             "qty_gimmick")
-                    )
-                temp_2_1 = 
-                    temp_2 %>% 
-                    filter(grepl("item",variable)) %>% 
-                    select(-variable) %>% 
-                    rename(item_gimmick = value)
-                temp_2_2 = 
-                    temp_2 %>% 
-                    filter(grepl("qty",variable)) %>% 
-                    select(-variable) %>% 
-                    rename(qty_gimmick = value) %>% 
-                    select(qty_gimmick)
-                temp_2 = cbind(temp_2_1,temp_2_2)
-            } else {
-                temp_2 = data.frame(
-                    id = temp_2$id,
-                    pemberian_gimmick = temp_2$pemberian_gimmick,
-                    item_gimmick = NA,
-                    qty_gimmick = NA
-                )
-            }
-            
-            # sekarang kita akan kerjakan yang data_1
-            # item penjualan kita buat tabular
-            temp_1 = 
-                temp_1 %>% 
-                melt(id.vars = "id") %>% 
-                filter(!is.na(value)) %>% 
-                rename(item_standar = variable) %>% 
-                merge(dbase) %>% 
-                mutate(omzet = value*harga) %>% 
-                select(-item_standar) %>% 
-                rename(qty_penjualan = value,
-                       item_penjualan = item) %>% 
-                relocate(id,item_penjualan,brand,qty_penjualan,harga,omzet)
-            
-            # sekarang saatnya moment of truth
-            m1 = nrow(temp_1)
-            m2 = nrow(temp_2)
-            m3 = nrow(temp_3)
-            
-            max_m = max(c(m1,m2,m3))
-            
-            if(m1 < max_m){
-                temp_1[(m1+1):max_m,] = NA
-            }
-            if(m2 < max_m){
-                temp_2[(m2+1):max_m,] = NA
-            }
-            if(m3 < max_m){
-                temp_3[(m3+1):max_m,] = temp_3[1,]
-            }
-            
-            temp_1$id = NULL
-            temp_2$id = NULL
-            temp_3$id = NULL
-            
-            final = cbind(temp_3,temp_2,temp_1)
-            ikanx[[i]] = final
+          temp_1 = data_1[[i]] %>% as.data.frame()
+          temp_2 = data_2[[i]] %>% as.data.frame()
+          temp_3 = data_3[[i]] %>% as.data.frame()
+          
+          # sekarang kita akan kerjakan yang data_2
+          # kita rapikan gimmick
+          # rules: saat tidak ada gimmick, maka sisanya dbuat nol alias NA
+          if(temp_2$pemberian_gimmick == "Ada"){
+            temp_2 = 
+              temp_2 %>% 
+              melt(id.vars = c("id","pemberian_gimmick")) %>% 
+              mutate(variable = ifelse(grepl("item",variable),
+                                       "item_gimmick",
+                                       "qty_gimmick")
+              )
+            temp_2_1 = 
+              temp_2 %>% 
+              filter(grepl("item",variable)) %>% 
+              select(-variable) %>% 
+              rename(item_gimmick = value)
+            temp_2_2 = 
+              temp_2 %>% 
+              filter(grepl("qty",variable)) %>% 
+              select(-variable) %>% 
+              rename(qty_gimmick = value) %>% 
+              select(qty_gimmick)
+            temp_2 = cbind(temp_2_1,temp_2_2)
+          } else {
+            temp_2 = data.frame(
+              id = temp_2$id,
+              pemberian_gimmick = temp_2$pemberian_gimmick,
+              item_gimmick = NA,
+              qty_gimmick = NA
+            )
+          }
+          
+          # sekarang kita akan kerjakan yang data_1
+          # item penjualan kita buat tabular
+          temp_1 = 
+            temp_1 %>% 
+            melt(id.vars = "id") %>% 
+            filter(!is.na(value)) %>% 
+            rename(item_standar = variable) %>% 
+            merge(dbase) %>% 
+            mutate(omzet = value*harga) %>% 
+            select(-item_standar) %>% 
+            rename(qty_penjualan = value,
+                   item_penjualan = item) %>% 
+            relocate(id,item_penjualan,brand,qty_penjualan,harga,omzet)
+          
+          # sekarang saatnya moment of truth
+          m1 = nrow(temp_1)
+          m2 = nrow(temp_2)
+          m3 = nrow(temp_3)
+          
+          max_m = max(c(m1,m2,m3))
+          
+          if(m1 < max_m){
+            temp_1[(m1+1):max_m,] = NA
+          }
+          if(m2 < max_m){
+            temp_2[(m2+1):max_m,] = NA
+          }
+          if(m3 < max_m){
+            temp_3[(m3+1):max_m,] = temp_3[1,]
+          }
+          
+          temp_1$id = NULL
+          temp_2$id = NULL
+          temp_3$id = NULL
+          
+          final = cbind(temp_3,temp_2,temp_1)
+          ikanx[[i]] = final
+          print(i)
         }
         
         # ========================
         # saatnya kita gabung kembali
         printed_data = data.frame()
         for(i in 1:length(data_1)){
-            temp = ikanx[[i]]
-            printed_data = rbind(temp,printed_data)
+          temp = ikanx[[i]]
+          printed_data = rbind(temp,printed_data)
+          print(i)
         }
         
         # hasil finalnya

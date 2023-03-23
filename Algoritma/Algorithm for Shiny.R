@@ -11,7 +11,7 @@ library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
-nama_file_utama = "Call &amp; Omzet (5).xlsx"
+nama_file_utama = "Call & Omzet (6).xlsx"
 nama_file_harga = "Template Harga (2).xlsx"
 
 # ========================
@@ -143,11 +143,6 @@ for(i in 1: length(data_1)){
 
 # ========================
 # saatnya kita gabung kembali
-printed_data = data.frame()
-for(i in 1:length(data_1)){
-  temp = ikanx[[i]]
-  printed_data = rbind(temp,printed_data)
-  print(i)
-}
+printed_data = do.call(rbind,ikanx)
 
 openxlsx::write.xlsx(printed_data,"hasil_konversi.xlsx")

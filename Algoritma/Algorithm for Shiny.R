@@ -11,7 +11,7 @@ library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
-nama_file_utama = "Call & Omzet (6).xlsx"
+nama_file_utama = "Call &amp; Omzet (2).xlsx"
 nama_file_harga = "Template Harga (2).xlsx"
 
 # ========================

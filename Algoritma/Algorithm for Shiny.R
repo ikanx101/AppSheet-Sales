@@ -11,8 +11,8 @@ library(reshape2)
 
 # ========================
 # jangan lupa ganti path file
-nama_file_utama = "Call &amp; Omzet (2).xlsx"
-nama_file_harga = "Template Harga (2).xlsx"
+nama_file_utama = "Call &amp; Omzet (12).xlsx"
+nama_file_harga = "Template Harga (1).xlsx"
 
 # ========================
 # extract data target utama
@@ -72,6 +72,11 @@ for(i in 1: length(data_1)){
   # sekarang kita akan kerjakan yang data_2
   # kita rapikan gimmick
   # rules: saat tidak ada gimmick, maka sisanya dbuat nol alias NA
+  
+  # perubahan terbaru 5 Oktober 2023
+  # kita ubah dulu jika pemberian gimmicknya NA
+  if(is.na(temp_2$pemberian_gimmick)){temp_2$pemberian_gimmick = "Tidak ada"}
+  
   if(temp_2$pemberian_gimmick == "Ada"){
     temp_2 = 
       temp_2 %>% 
@@ -145,4 +150,4 @@ for(i in 1: length(data_1)){
 # saatnya kita gabung kembali
 printed_data = do.call(rbind,ikanx)
 
-openxlsx::write.xlsx(printed_data,"hasil_konversi.xlsx")
+openxlsx::write.xlsx(printed_data,"hasil_konversi new.xlsx")

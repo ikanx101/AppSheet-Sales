@@ -138,7 +138,8 @@ df_av_raw_2 =
   reshape2::melt(id.vars = "id") %>% 
   filter(!is.na(value)) %>% 
   select(-value) %>% 
-  rename(availability_item = variable)
+  rename(availability_item = variable) %>% 
+  mutate(availability_item = benerin(availability_item))
 
 # kita gabung kembali ke format yang diinginkan
 df_gabung = 

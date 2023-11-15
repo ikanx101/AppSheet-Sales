@@ -32,10 +32,10 @@ setwd("~/AppSheet-Sales/Versi Baru/Data Raw")
 n_core = detectCores()
 
 # si warna merah yang tak diperlukan AV
-warna_merah = readLines("warna merah.txt") %>% as.numeric()
+# warna_merah = readLines("warna merah.txt") %>% as.numeric()
 
 # si warna merah yang tak diperlukan availability
-warna_merah_av = readLines("warna merah - av.txt") %>% as.numeric()
+# warna_merah_av = readLines("warna merah - av.txt") %>% as.numeric()
 
 # function ntuk mengembalikan nama produk
 benerin = function(tes){
@@ -43,7 +43,7 @@ benerin = function(tes){
 }
 
 # function untuk benerin nama kolom
-nama_kolom = function(tes){
+nama_judul = function(tes){
   benerin(tes) %>% stringr::str_to_title()
 }
 
@@ -59,12 +59,20 @@ df_harga   =
   rename(item_penjualan = nama_item)
 
 # baca file yang hendak dikonversi
-file_conv  = "Kebutuhan Converter Appsheet.xlsx"
+file_conv  = "Call (3).xlsx"
 df_raw     = 
   read_excel(file_conv) %>% 
-  janitor::clean_names() %>% 
-  .[-warna_merah]             # kita hanya akan pilih yang warna putih
-# colnames(df_raw)
+  janitor::clean_names() 
+
+# ambil nama kolom untuk omset
+nama_kolom = colnames(df_raw)
+# pertengahan pg3 dan pg5 harus kita hapus
+awal  = which(nama_kolom == "pg3")
+akhir = which(nama_kolom == "pg_5")
+hapus = awal:akhir
+
+# ini yang perlu diambil
+df_raw = df_raw[-hapus]
 # ==============================================================================
 
 
@@ -87,9 +95,16 @@ df_omset_raw_1 =
 # colnames(df_omset_raw_1)
 
 # pemisahan kedua
+# ambil nama kolom untuk omset
+nama_kolom = colnames(df_raw)
+# pertengahan pg3 dan pg5 harus kita hapus
+awal   = which(nama_kolom == "pg")
+akhir  = which(nama_kolom == "pg_8")
+simpan = c(1,awal:akhir)
+
 df_omset_raw_2 = 
-  df_raw %>% 
-  select(!contains(selection)) %>% 
+  df_raw[simpan] %>% 
+  select(-contains("pg")) %>% 
   reshape2::melt(id.vars = "id") %>% 
   filter(!is.na(value)) %>% 
   rename(item_penjualan = variable,
@@ -107,7 +122,7 @@ df_gabung =
   relocate(av_item,check_out,durasi,.after = "omzet")
 
 # benerin nama kolom finalnya
-colnames(df_gabung) = nama_kolom(colnames(df_gabung))
+colnames(df_gabung) = nama_judul(colnames(df_gabung))
 
 openxlsx::write.xlsx(df_gabung,file = "Omzet_converted.xlsx")
 # ==============================================================================
@@ -116,13 +131,16 @@ openxlsx::write.xlsx(df_gabung,file = "Omzet_converted.xlsx")
 # ==============================================================================
 # tahap 2
 # baca file yang hendak dikonversi
-file_conv  = "Kebutuhan Converter Appsheet.xlsx"
 df_raw     = 
   read_excel(file_conv) %>% 
-  janitor::clean_names() %>% 
-  .[warna_merah_av] 
+  janitor::clean_names() 
 
-colnames(df_raw)
+# ambil nama kolom untuk av
+nama_kolom = colnames(df_raw)
+# pertengahan pg3 dan pg5 harus kita hapus
+awal     = which(nama_kolom == "pg3")
+akhir    = which(nama_kolom == "pg_5")
+ambil_av = c(1,awal:akhir)
 
 # kita lakukan pemecahan kembali
 # pemecahan 1
@@ -133,10 +151,10 @@ df_av_raw_1 =
 
 # pemisahan kedua
 df_av_raw_2 = 
-  df_raw %>% 
-  select(!contains(selection)) %>% 
+  df_raw[ambil_av] %>% 
   reshape2::melt(id.vars = "id") %>% 
-  filter(!is.na(value)) %>% 
+  mutate(value = as.numeric(value)) %>% 
+  filter(value > 0) %>% 
   select(-value) %>% 
   rename(availability_item = variable) %>% 
   mutate(availability_item = benerin(availability_item))
@@ -148,7 +166,7 @@ df_gabung =
   relocate(check_out,durasi,.after = "project_2")
 
 # benerin nama kolom finalnya
-colnames(df_gabung) = nama_kolom(colnames(df_gabung))
+colnames(df_gabung) = nama_judul(colnames(df_gabung))
 
 openxlsx::write.xlsx(df_gabung,file = "AV_converted.xlsx")
 # ==============================================================================

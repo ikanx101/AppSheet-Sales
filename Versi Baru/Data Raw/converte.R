@@ -52,14 +52,14 @@ nama_judul = function(tes){
 
 # ==============================================================================
 # baca file harga
-file_harga = "Template Harga 1.xlsx"
+file_harga = "Template Harga 2.xlsx"
 df_harga   = 
   read_excel(file_harga) %>% 
   janitor::clean_names() %>% 
   rename(item_penjualan = nama_item)
 
 # baca file yang hendak dikonversi
-file_conv  = "Call (3).xlsx"
+file_conv  = "Call (7).xlsx"
 df_raw     = 
   read_excel(file_conv) %>% 
   janitor::clean_names() 

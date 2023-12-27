@@ -119,7 +119,9 @@ df_omset_raw_2 =
 df_gabung = 
   merge(df_omset_raw_1,df_omset_raw_2,by = "id") %>% 
   relocate(brand,sub_brand,harga,.after = "item_penjualan") %>% 
-  relocate(av_item,check_out,durasi,.after = "omzet")
+  relocate(av_item,check_out,durasi,.after = "omzet") %>% 
+  # ini yang kita hapus
+  select(-check_out,-durasi)
 
 # benerin nama kolom finalnya
 colnames(df_gabung) = nama_judul(colnames(df_gabung))
@@ -163,7 +165,9 @@ df_av_raw_2 =
 df_gabung = 
   merge(df_av_raw_1,df_av_raw_2,by = "id") %>% 
   relocate(availability_item,.before = "peserta_display_wow_operator") %>% 
-  relocate(check_out,durasi,.after = "project_2")
+  relocate(check_out,durasi,.after = "project_2") %>% 
+  # ini yang kita hapus
+  select(-check_out,-durasi)
 
 # benerin nama kolom finalnya
 colnames(df_gabung) = nama_judul(colnames(df_gabung))

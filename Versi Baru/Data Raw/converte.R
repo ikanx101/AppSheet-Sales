@@ -3,7 +3,7 @@
 # CONVERTER APPSHEET
 # Versi Neo 2023
 # by: ikanx101.com
-# last update: 9 November
+# last update: 7 Februari 2024
 #
 # latar belakang
 # [Tuesday 8:34 AM] Chandra Bimantara
@@ -52,14 +52,17 @@ nama_judul = function(tes){
 
 # ==============================================================================
 # baca file harga
-file_harga = "Template Harga 2.xlsx"
+file_harga = "Template Harga 1.xlsx"
 df_harga   = 
   read_excel(file_harga) %>% 
   janitor::clean_names() %>% 
-  rename(item_penjualan = nama_item)
+  rename(item_penjualan = nama_item) %>% 
+  # ini revisi terbaru
+  mutate(item_penjualan = janitor::make_clean_names(item_penjualan),
+         item_penjualan = benerin(item_penjualan))
 
 # baca file yang hendak dikonversi
-file_conv  = "Call (7).xlsx"
+file_conv  = "Call (35).xlsx"
 df_raw     = 
   read_excel(file_conv) %>% 
   janitor::clean_names() 

@@ -27,6 +27,12 @@ n_core = detectCores()
 # dimulai dari memasukkan nama files excelnya terlebih dahulu
 nama_file_utama = "Data Appsheet.xlsx"
 nama_file_harga = "Template Harga 2.xlsx"
+
+# fungsi untuk bikin judul proper
+proper_new = function(x) {
+  tess = stringi::stri_trans_general(x, id = "Title")
+  gsub("\\_", " ", tess)
+}
 # ==============================================================================
 
 
@@ -104,6 +110,7 @@ nama_var = colnames(data)
     rename(item_penjualan = nama_item) |> 
     mutate(tipe_transaksi = "Call")
   
+  colnames(data_2) = proper_new(colnames(data_2))
   # kita simpan dulu ya hasilnya yang penjualan dulu
   openxlsx::write.xlsx(data_2,file = "penjualan_converted.xlsx")
 # ==============================================================================
@@ -142,6 +149,7 @@ nama_var = colnames(data)
            availability = toupper(availability)) |> 
     mutate(tipe_transaksi = "AV") 
   
+  colnames(data_3) = proper_new(colnames(data_3))
   # kita simpan dulu ya hasilnya yang penjualan dulu
   openxlsx::write.xlsx(data_3,file = "av_converted.xlsx")
 # ==============================================================================
@@ -164,3 +172,4 @@ data_4 = bind_rows(data_2,data_3)
 
 # kita simpan dulu ya hasilnya yang penjualan dulu
 openxlsx::write.xlsx(data_4,file = "av_sales_gabung_converted.xlsx")
+# ==============================================================================

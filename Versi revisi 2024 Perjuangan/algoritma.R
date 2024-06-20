@@ -63,7 +63,7 @@ nama_var = colnames(data)
   
   # update pada tanggal 20 Juni
   # jangan lupa harus dimasukkan firestart dan juga kolom yang mengandung nama "project"
-  tambah_var = nama_var[grepl("project|firestart",nama_var)]
+  tambah_var = nama_var[grepl("project|firestart|sahabat",nama_var)]
   # kita gabung lagi ke nama_var deh ya
   variabel_untuk_data_1 = c(variabel_untuk_data_1,tambah_var)
 
@@ -134,3 +134,6 @@ nama_var = colnames(data)
   
   # kita simpan dulu ya hasilnya yang penjualan dulu
   openxlsx::write.xlsx(data_3,file = "av_converted.xlsx")
+  
+data_2
+data_3

@@ -63,13 +63,19 @@ nama_var = colnames(data)
   
   # update pada tanggal 20 Juni
   # jangan lupa harus dimasukkan firestart dan juga kolom yang mengandung nama "project"
-  tambah_var = nama_var[grepl("project|firestart|sahabat",nama_var)]
+  tambah_var = nama_var[grepl("project|firestart|sahabat|wow|loyalty",nama_var)]
   # kita gabung lagi ke nama_var deh ya
   variabel_untuk_data_1 = c(variabel_untuk_data_1,tambah_var)
 
   # berikut adalah data base pertama
   data_1 = data |> select(all_of(variabel_untuk_data_1))
-
+# ==============================================================================
+  
+  
+  
+# ==============================================================================
+# CHUNK 3
+  
 # berikutnya kita akan ambil data untuk penjualannya
   # dimulai dari id lalu kita tambahin nama item yang dijual
   data_2 = 
@@ -100,7 +106,12 @@ nama_var = colnames(data)
   
   # kita simpan dulu ya hasilnya yang penjualan dulu
   openxlsx::write.xlsx(data_2,file = "penjualan_converted.xlsx")
-
+# ==============================================================================
+  
+  
+# ==============================================================================
+# CHUNK 4
+  
 # berikutnya adalah data ketiga, yakni availability dari produk-produk 
   # dimulai dari id
   id_1 = which(nama_var == "pg3")
@@ -108,10 +119,6 @@ nama_var = colnames(data)
   id_2 = which(nama_var == "pg_5")
   # berikut adalah nama variabel yang dibutuhkan
   variabel_untuk_data_3 = nama_var[id_1:id_2]
-
-  # tambahan pada 20 juni
-  # kita masukin si firestart dan project ke sana
-  variabel_untuk_data_3 = c(variabel_untuk_data_3,tambah_var)
 
   # berikut adalah data base pertama
   data_3 = data |> select(id,all_of(variabel_untuk_data_3))
@@ -141,7 +148,7 @@ nama_var = colnames(data)
 
   
 # ==============================================================================
-# CHUNK 3 
+# CHUNK 5
   
 # kita akan gabung semua jadi satu data ke bawah
 # pake apa? ya pakai bind_rows() aja donk 

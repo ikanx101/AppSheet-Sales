@@ -94,7 +94,9 @@ nama_var = colnames(data)
     select(c(all_of(variabel_untuk_data_1),
              "nama_item","brand","sub_brand","harga",
              "qty_sold","omset")) |> 
-    select(-contains("pg"))
+    select(-contains("pg")) |> 
+    rename(item_penjualan = nama_item) |> 
+    mutate(tipe_transaksi = "Call")
   
   # kita simpan dulu ya hasilnya yang penjualan dulu
   openxlsx::write.xlsx(data_2,file = "penjualan_converted.xlsx")
@@ -130,10 +132,28 @@ nama_var = colnames(data)
              "availability","av_item")) |> 
     select(-contains("pg")) |> 
     mutate(availability = gsub("\\_"," ",availability),
-           availability = toupper(availability))
+           availability = toupper(availability)) |> 
+    mutate(tipe_transaksi = "AV") 
   
   # kita simpan dulu ya hasilnya yang penjualan dulu
   openxlsx::write.xlsx(data_3,file = "av_converted.xlsx")
+# ==============================================================================
+
   
-data_2
-data_3
+# ==============================================================================
+# CHUNK 3 
+  
+# kita akan gabung semua jadi satu data ke bawah
+# pake apa? ya pakai bind_rows() aja donk 
+
+# buat ngecek nama-nama kolom  
+nama_kolom_2 = data_2 |> colnames()
+nama_kolom_3 = data_3 |> colnames()
+# melihat apakah ada perbedaan antara keduanya
+setdiff(nama_kolom_2,nama_kolom_3)
+
+# kita gabung
+data_4 = bind_rows(data_2,data_3)
+
+# kita simpan dulu ya hasilnya yang penjualan dulu
+openxlsx::write.xlsx(data_4,file = "av_sales_gabung_converted.xlsx")

@@ -1,7 +1,7 @@
 # ==============================================================================
 # ini adalah algoritma untuk melakukan dan mengekstraksi data dari survey appsheet
 # dibuat oleh: ikanx101.com
-# versi: 19 juni 2024
+# versi: 20 juni 2024
 # ==============================================================================
 
 
@@ -60,6 +60,13 @@ nama_var = colnames(data)
   id_2 = which(nama_var == "pg3")
   # berikut adalah nama variabel yang dibutuhkan
   variabel_untuk_data_1 = nama_var[id_1:id_2]
+  
+  # update pada tanggal 20 Juni
+  # jangan lupa harus dimasukkan firestart dan juga kolom yang mengandung nama "project"
+  tambah_var = nama_var[grepl("project|firestart",nama_var)]
+  # kita gabung lagi ke nama_var deh ya
+  variabel_untuk_data_1 = c(variabel_untuk_data_1,tambah_var)
+
   # berikut adalah data base pertama
   data_1 = data |> select(all_of(variabel_untuk_data_1))
 
@@ -99,6 +106,11 @@ nama_var = colnames(data)
   id_2 = which(nama_var == "pg_5")
   # berikut adalah nama variabel yang dibutuhkan
   variabel_untuk_data_3 = nama_var[id_1:id_2]
+
+  # tambahan pada 20 juni
+  # kita masukin si firestart dan project ke sana
+  variabel_untuk_data_3 = c(variabel_untuk_data_3,tambah_var)
+
   # berikut adalah data base pertama
   data_3 = data |> select(id,all_of(variabel_untuk_data_3))
   
@@ -122,6 +134,3 @@ nama_var = colnames(data)
   
   # kita simpan dulu ya hasilnya yang penjualan dulu
   openxlsx::write.xlsx(data_3,file = "av_converted.xlsx")
-  
-  
-  

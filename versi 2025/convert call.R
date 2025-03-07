@@ -47,7 +47,12 @@ df_final =
   merge(df_3) |> 
   relocate(Brand,.after = "Durasi") |> 
   relocate(Category,.after = "Brand") |> 
-  relocate(`Nama Item`,.after = "Category")
+  relocate(`Nama Item`,.after = "Category") |> 
+  # revisi 7 maret
+  filter(!Status %in% c("Tidak Jual")) |> 
+  filter(Status != "<NA>")
+
+df_final |> tabyl(Status)
 
 openxlsx::write.xlsx(df_final,file = "Call Converted.xlsx",overwrite = T)
 

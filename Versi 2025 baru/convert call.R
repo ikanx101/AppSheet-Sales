@@ -66,7 +66,14 @@ df_final$Tanggal = as.Date(as.numeric(df_final$Tanggal),
 df_final$Tanggal = df_final$Tanggal - 2
 
 
-openxlsx::write.xlsx(df_final,file = "Call Converted.xlsx",overwrite = T)
+# sekarang kita akan pecah ya
+marker = nrow(df_final)
+
+if(marker < 10^6){
+  output = df_final
+}
+
+openxlsx::write.xlsx(output,file = "Call Converted.xlsx",overwrite = T)
 
 
 

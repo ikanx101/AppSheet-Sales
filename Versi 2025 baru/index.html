@@ -32,7 +32,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="index_files/libs/quarto-html/quarto-syntax-highlighting-2f5df379a58b258e96c21c0638c20c03.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="index_files/libs/bootstrap/bootstrap.min.js"></script>
 <link href="index_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="index_files/libs/bootstrap/bootstrap-2a707e7014eb29ac5f88b8469db9b888.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="index_files/libs/bootstrap/bootstrap-6780d5773c6bf0127d3743945d82c672.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script src="index_files/libs/quarto-dashboard/quarto-dashboard.js"></script>
 <script src="index_files/libs/quarto-dashboard/stickythead.js"></script>
 <script src="index_files/libs/quarto-dashboard/datatables.min.js" kdttablesentinel="true"></script>
@@ -78,20 +78,20 @@ grid-auto-rows: minmax(0, 1fr);">
 <div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content) minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
 <div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-<div style="font-size: 90%;" class="html-fill-item html-fill-container">
 <p><em>Converter</em> ini dibuat untuk mengubah data hasil <em>input</em> <strong>AppSheet: Call</strong> ke bentuk tabular yang lebih <em>excel-user-friendly</em>.</p>
+<div style="font-size: 80%;" class="html-fill-item html-fill-container">
 <p>Cara pakai:</p>
 <ol type="1">
-<li>Klik tombol <code>Connect</code> pada pojok kanan atas untuk menyalakan <em>server cloud Google Colab</em>.</li>
 <li><em>Upload</em> dua <em>files</em> yang dibutuhkan, yakni:
 <ul>
 <li>Data <strong>AppSheet: Call</strong>. Nama <em>sheet</em> tempat data yang hendak dikonversi: <code>Merchandise</code>. Diharapkan penamaan <em>sheet</em> ini <strong>tidak berubah</strong>.</li>
 <li>Data <em>master item</em>.</li>
 </ul></li>
 <li>Klik <code>Run all</code>.</li>
-<li>Tunggu hingga proses selesai (sampai muncul pesan <code>PROSES SELESAI</code>). Kira-kira akan memakan waktu 5-10 menit.</li>
-<li>Silakan <em>download file</em> hasil.</li>
+<li>Tunggu hingga proses selesai (sampai muncul pesan <code>PROSES SELESAI</code>). Kira-kira akan memakan waktu sekitar 5 menit.</li>
+<li>Silakan <em>download file</em> hasil konversi.</li>
 </ol>
+<p><strong>Keterangan</strong>: Nama <em>files</em> yang di-<em>upload</em> bebas tidak ditentukan tapi nama <em>sheet</em> yang hendak dikonversi harus bernama <code>Merchandise</code>.</p>
 </div>
 </div>
 <bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
@@ -107,40 +107,43 @@ Converter CALL
 <div class="card-body html-fill-item html-fill-container">
 <div class="cell-output-display html-fill-item html-fill-container">
 <div class="form-group shiny-input-container html-fill-item html-fill-container">
-<label class="control-label" id="nama_file_utama-label" for="nama_file_utama">Pilih file: raw data AppSheet</label>
+<label class="control-label" id="nama_file_call-label" for="nama_file_call">Pilih file: raw data AppSheet: CALL</label>
 <div class="input-group html-fill-item html-fill-container">
 <label class="input-group-btn input-group-prepend">
 <span class="btn btn-default btn-file">
 Browse...
-<input id="nama_file_utama" class="shiny-input-file" name="nama_file_utama" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
+<input id="nama_file_call" class="shiny-input-file" name="nama_file_call" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
 </span>
 </label>
 <input type="text" class="form-control" placeholder="No file selected" readonly="readonly">
 </div>
-<div id="nama_file_utama_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
+<div id="nama_file_call_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
 <div class="progress-bar html-fill-item html-fill-container"></div>
 </div>
 </div>
 </div>
 <div class="cell-output-display html-fill-item html-fill-container">
 <div class="form-group shiny-input-container html-fill-item html-fill-container">
-<label class="control-label" id="nama_file_harga-label" for="nama_file_harga">Pilih file: database harga</label>
+<label class="control-label" id="nama_file_master-label" for="nama_file_master">Pilih file: database harga</label>
 <div class="input-group html-fill-item html-fill-container">
 <label class="input-group-btn input-group-prepend">
 <span class="btn btn-default btn-file">
 Browse...
-<input id="nama_file_harga" class="shiny-input-file" name="nama_file_harga" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
+<input id="nama_file_master" class="shiny-input-file" name="nama_file_master" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
 </span>
 </label>
 <input type="text" class="form-control" placeholder="No file selected" readonly="readonly">
 </div>
-<div id="nama_file_harga_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
+<div id="nama_file_master_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
 <div class="progress-bar html-fill-item html-fill-container"></div>
 </div>
 </div>
 </div>
 <div class="cell-output-display html-fill-item html-fill-container">
-<button id="do" type="button" class="btn btn-default action-button">Run all</button>
+<button id="run_1" type="button" class="btn btn-default action-button">Run all</button>
+</div>
+<div class="cell-output-display html-fill-item html-fill-container">
+<div id="txt_1" class="shiny-text-output html-fill-item html-fill-container"></div>
 </div>
 <div class="cell-output-display html-fill-item html-fill-container">
 <a id="download_call" class="btn btn-default shiny-download-link disabled" href="" target="_blank" download="" aria-disabled="true" tabindex="-1">
@@ -155,11 +158,70 @@ Download Hasil Konversi
         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
     </span>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-</div><div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
+</div><div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content) minmax(3em, 1fr); grid-auto-columns: minmax(0, 1fr);">
 <div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
 <div class="card-body html-fill-item html-fill-container">
-Lalala
-<hr>
+<p><em>Converter</em> ini dibuat untuk mengubah data hasil <em>input</em> <strong>AppSheet: MDS</strong> ke bentuk tabular yang lebih <em>excel-user-friendly</em>.</p>
+<div style="font-size: 80%;" class="html-fill-item html-fill-container">
+<p>Cara pakai:</p>
+<ol type="1">
+<li><em>Upload</em> <em>file</em> yang dibutuhkan, yakni:
+<ul>
+<li>Data <strong>AppSheet: MDS</strong>.</li>
+</ul></li>
+<li>Klik <code>Run all</code>.</li>
+<li>Tunggu hingga proses selesai (sampai muncul pesan <code>PROSES SELESAI</code>). Kira-kira akan memakan waktu 5 menit.</li>
+<li>Silakan <em>download file</em> hasil konversi.</li>
+</ol>
+<p><strong>Keterangan</strong>: Nama <em>file</em> yang di-<em>upload</em> bebas tidak ditentukan.</p>
+</div>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
+<div class="card cell html-fill-item html-fill-container bslib-card" data-title="Converter MDS" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-header"><div class="card-title html-fill-item html-fill-container"><span style="display: inline">
+Converter MDS
+</span></div></div>
+<div class="card-body html-fill-item html-fill-container">
+<div class="cell-output-display html-fill-item html-fill-container">
+<div class="form-group shiny-input-container html-fill-item html-fill-container">
+<label class="control-label" id="nama_file_mds-label" for="nama_file_mds">Pilih file: raw data AppSheet: MDS</label>
+<div class="input-group html-fill-item html-fill-container">
+<label class="input-group-btn input-group-prepend">
+<span class="btn btn-default btn-file">
+Browse...
+<input id="nama_file_mds" class="shiny-input-file" name="nama_file_mds" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
+</span>
+</label>
+<input type="text" class="form-control" placeholder="No file selected" readonly="readonly">
+</div>
+<div id="nama_file_mds_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
+<div class="progress-bar html-fill-item html-fill-container"></div>
+</div>
+</div>
+</div>
+<div class="cell-output-display html-fill-item html-fill-container">
+<div class="form-group shiny-input-container html-fill-item html-fill-container">
+<label class="control-label" id="nama_sheet_mds-label" for="nama_sheet_mds">Nama sheet yang hendak diproses:</label>
+<input id="nama_sheet_mds" type="text" class="shiny-input-text form-control" value="">
+</div>
+</div>
+<div class="cell-output-display html-fill-item html-fill-container">
+<button id="run_2" type="button" class="btn btn-default action-button">Run all</button>
+</div>
+<div class="cell-output-display html-fill-item html-fill-container">
+<div id="txt_2" class="shiny-text-output html-fill-item html-fill-container"></div>
+</div>
+<div class="cell-output-display html-fill-item html-fill-container">
+<a id="download_mds" class="btn btn-default shiny-download-link disabled" href="" target="_blank" download="" aria-disabled="true" tabindex="-1">
+<i class="fas fa-download" role="presentation" aria-label="download icon"></i>
+Download Hasil Konversi
+</a>
+</div>
 </div>
 <bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
     <template>Expand</template>
@@ -177,9 +239,10 @@ Lalala
 </div>
 </div></div><aside id="bslib-sidebar-1" class="sidebar html-fill-container html-fill-item"><div class="html-fill-container html-fill-item">
 <p><strong><em>AppSheet Converter</em> 2025</strong></p>
+<p>Digunakan untuk mengkonversi data <em>input</em> dari aplikasi <em>Appsheet</em> tim <strong>Distribution Development Nutrifood</strong>.</p>
 <p>Dibuat dengan <strong>R</strong>.</p>
 <p><em>Last Update</em>: 12 Juni 2025</p>
-<p><a href="ikanx101.com">ikanx101.com</a></p>
+<p><a href="https://ikanx101.com/">ikanx101.com</a></p>
 </div></aside>
 <button class="collapse-toggle" type="button" title="Toggle sidebar" aria-expanded="true" aria-controls="bslib-sidebar-1">
     <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 16 16" class="bi bi-chevron-left collapse-icon" style="fill:currentColor;" aria-hidden="true" role="img">
@@ -200,17 +263,199 @@ library(tidyr)
 library(openxlsx)
 library(janitor)
 library(readxl)
+library(bslib)
 
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-output$distPlot <- renderPlot({
-   x <- faithful[, 2]  # Old Faithful Geyser data
-   bins <- seq(min(x), max(x), length.out = input$bins + 1)
-   hist(x, breaks = bins, col = 'darkgray', border = 'white',
-        xlab = 'Waiting time to next eruption (in mins)',
-        main = 'Histogram of waiting times')
+# ===========================================================
+# ini adalah untuk menambah progress bar
+# tombol run_1
+text         <- reactiveVal()
+output$txt_1 <- renderText({ text() })
+
+observe({
+  withProgress( 
+    message = 'Proses konversi sedang berlangsung!', 
+    detail  = 'Sabar ya...', 
+    value   = 0, 
+    {
+      for (i in 1:40) { 
+        incProgress(1/40) 
+        Sys.sleep(0.25) 
+      } 
+      text("CALL Sudah selesai!") 
+    } 
+  ) 
+ }) |> bindEvent(input$run_1)
+
+# tombol run_2
+text         <- reactiveVal()
+output$txt_2 <- renderText({ text() })
+
+observe({
+  withProgress( 
+    message = 'Proses konversi sedang berlangsung!', 
+    detail  = 'Sabar ya...', 
+    value   = 0, 
+    {
+      for (i in 1:40) { 
+        incProgress(1/40) 
+        Sys.sleep(0.15) 
+      } 
+      text("MDS Sudah selesai!") 
+    } 
+  ) 
+ }) |> bindEvent(input$run_2)
+# ===========================================================
+  
+
+# ===========================================================
+# converter pertama
+data_konversi_1 = reactive({
+  # extract data target utama
+  sht  = "Merchandise"
+  df   = read_excel(input$nama_file_call$datapath,
+                    sheet = sht,col_types = "text")
+  
+  nama_kol    = colnames(df)
+  batas_akhir = which(nama_kol == "Durasi")
+
+  # kita save dulu variabel yang baru
+  df_baru = 
+    df %>% 
+    select(`ID Merch`,`Firestart NS`,`Firestart Hilo`,`Status Sekolah`) %>% 
+    mutate(`Tipe Transaksi` = "AV") %>% 
+    relocate(`Tipe Transaksi`,.after = `ID Merch`)
+  
+  id_penting  = 1:batas_akhir
+  kol_penting = nama_kol[id_penting]
+  
+  df_1 = df |> select(all_of(kol_penting))
+  
+  kol_penting = nama_kol[2:batas_akhir]
+  df_2 = 
+    df |> 
+    select(-all_of(kol_penting)) |> 
+    reshape2::melt(id.vars = "ID Merch") |> 
+    filter(!grepl("sku|tier|fire|status",variable,ignore.case = T)) |> 
+    mutate(variable = as.character(variable)) |> 
+    rename("Nama Item" = variable,
+           Status      = value) 
+  
+  # ambil master item
+  df_master = 
+    read_excel(input$nama_file_master$datapath) |> 
+    janitor::clean_names() |> 
+    select(item_group,category,brand) |> 
+    rename("Nama Item" = item_group,
+           Brand       = brand,
+           Category    = category)
+  
+  df_3 = df_2 |> merge(df_master,all.x = T)
+
+  # ini adalah df_final nya
+  df_final = 
+    df_1 |> 
+    merge(df_3) |> 
+    relocate(Brand,.after = "Durasi") |> 
+    relocate(Category,.after = "Brand") |> 
+    relocate(`Nama Item`,.after = "Category") |> 
+    # revisi 7 maret
+    filter(!Status %in% c("Tidak Jual")) |> 
+    filter(Status != "<NA>")
+  
+  df_final = df_final |> merge(df_baru)
+  
+  df_final$Tanggal = as.Date(as.numeric(df_final$Tanggal),
+                             origin = "1900-01-01")
+  df_final$Tanggal = df_final$Tanggal - 2
+        
+  output = df_final 
+  return(output)
 })
+
+# fungsi untuk download data
+data_call = data_konversi_1
+output$download_call <- downloadHandler(
+        filename = function() {
+            paste0("Converted AppSheet Call ", Sys.time(), ".xlsx")
+        },
+        content = function(file) {
+            openxlsx::write.xlsx(data_call(), file)
+        }
+    )
+# ===========================================================    
+
+
+# ===========================================================
+# converter kedua
+data_konversi_2 = reactive({
+  # data MDS masuk
+  # file = "MDS MODERN (2).xlsx"
+  sht  = input$nama_sheet_mds %>% as.character()
+
+  df = read_excel(input$nama_file_mds$datapath,sheet = sht)
+
+  nama_kol    = colnames(df)
+  batas_akhir = which(nama_kol == "Klasifikasi Customer")
+  
+  id_penting  = 1:batas_akhir
+  kol_penting = nama_kol[id_penting]
+  
+  df_1 = df |> select(all_of(kol_penting))
+  
+  kol_penting = nama_kol[2:batas_akhir]
+  df_2 = 
+    df |> 
+    select(-all_of(kol_penting)) |> 
+    reshape2::melt(id.vars = "ID") |> 
+    mutate(variable = as.character(variable)) |>
+    filter(value != "N/A") |> 
+    filter(value != "Tidak Jual") |> 
+    rename("Products"      = variable,
+           "Status Produk" = value) 
+  
+  df_final = 
+    df_1 |> 
+    merge(df_2) |> 
+    janitor::clean_names() |> 
+    mutate(amount = 0) |> 
+    mutate(brand = case_when(
+      grepl("hi lo",products,ignore.case = T) ~ "Hi Lo",
+      grepl("l-men",products,ignore.case = T) ~ "L-Men",
+      grepl("ns",products,ignore.case = T) ~ "NutriSari",
+      grepl("ts",products,ignore.case = T) ~ "Tropicana Slim",
+      grepl("hi lo",products,ignore.case = T) ~ "Hi Lo"
+    )) |> 
+    select(tanggal,nama_mds_spg,region,klasifikasi_customer,customer_name,customer_code,
+           products,amount,status_produk,brand,divisi)
+  
+  colnames(df_final) = c("Submission Date","Pic","Area","Klasifikasi Customer","Customer Name",
+                         "Customer Code","Products","Amount","Status Produk","Brand","DIV")
+  
+  output = df_final
+  return(output)
+})
+
+# fungsi untuk download data
+data_mds = data_konversi_2
+output$download_mds <- downloadHandler(
+        filename = function() {
+            paste0("Converted AppSheet MDS ", Sys.time(), ".xlsx")
+        },
+        content = function(file) {
+            openxlsx::write.xlsx(data_mds(), file)
+        }
+    )
+# ===========================================================  
+
+
+
+
+
+
+
 </script>
  
 <script type="application/shiny-prerendered" data-context="server-extras">
@@ -242,12 +487,12 @@ ojs_define <- function(..., .session = shiny::getDefaultReactiveDomain()) {
 </p>
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="dependencies">
-{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["font-awesome"]},{"type":"character","attributes":{},"value":["6.5.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["fontawesome"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["css/all.min.css","css/v4-shims.min.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["fontawesome"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.5.3"]}]}]}
+{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["font-awesome"]},{"type":"character","attributes":{},"value":["6.5.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["fontawesome"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["css/all.min.css","css/v4-shims.min.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["fontawesome"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.5.3"]}]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name","version","src","meta","script","stylesheet","head","attachment","package","all_files","pkgVersion"]},"class":{"type":"character","attributes":{},"value":["html_dependency"]}},"value":[{"type":"character","attributes":{},"value":["font-awesome"]},{"type":"character","attributes":{},"value":["6.5.2"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["file"]}},"value":[{"type":"character","attributes":{},"value":["fontawesome"]}]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["css/all.min.css","css/v4-shims.min.css"]},{"type":"NULL"},{"type":"NULL"},{"type":"character","attributes":{},"value":["fontawesome"]},{"type":"logical","attributes":{},"value":[true]},{"type":"character","attributes":{},"value":["0.5.3"]}]}]}
 </script>
 <!--/html_preserve-->
 <!--html_preserve-->
 <script type="application/shiny-prerendered" data-context="execution_dependencies">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53]}},"value":[{"type":"character","attributes":{},"value":["base","cellranger","cli","compiler","datasets","digest","dplyr","evaluate","fastmap","fontawesome","generics","glue","graphics","grDevices","htmltools","htmlwidgets","httpuv","janitor","jsonlite","knitr","later","lifecycle","lubridate","magrittr","methods","mime","openxlsx","pillar","pkgconfig","promises","purrr","R6","Rcpp","readxl","rlang","rmarkdown","rstudioapi","shiny","snakecase","stats","stringi","stringr","tibble","tidyr","tidyselect","timechange","tools","utils","vctrs","xfun","xtable","yaml","zip"]},{"type":"character","attributes":{},"value":["4.5.0","1.1.0","3.6.5","4.5.0","4.5.0","0.6.37","1.1.4","1.0.3","1.2.0","0.5.3","0.1.4","1.8.0","4.5.0","4.5.0","0.5.8.1","1.6.4","1.6.16","2.2.1","2.0.0","1.50","1.4.2","1.0.4","1.9.4","2.0.3","4.5.0","0.13","4.2.8","1.10.2","2.0.3","1.3.2","1.0.4","2.6.1","1.0.14","1.4.5","1.1.6","2.29","0.17.1","1.10.0","0.11.1","4.5.0","1.8.7","1.5.1","3.2.1","1.3.1","1.2.1","0.3.0","4.5.0","4.5.0","0.6.5","0.52","1.8-4","2.3.10","2.3.3"]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["packages","version"]},"class":{"type":"character","attributes":{},"value":["data.frame"]},"row.names":{"type":"integer","attributes":{},"value":[1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57]}},"value":[{"type":"character","attributes":{},"value":["base","bslib","cachem","cellranger","cli","compiler","datasets","digest","dplyr","evaluate","fastmap","fontawesome","generics","glue","graphics","grDevices","htmltools","htmlwidgets","httpuv","janitor","jquerylib","jsonlite","knitr","later","lifecycle","lubridate","magrittr","methods","mime","openxlsx","pillar","pkgconfig","promises","purrr","R6","Rcpp","readxl","rlang","rmarkdown","rstudioapi","sass","shiny","snakecase","stats","stringi","stringr","tibble","tidyr","tidyselect","timechange","tools","utils","vctrs","xfun","xtable","yaml","zip"]},{"type":"character","attributes":{},"value":["4.5.0","0.9.0","1.1.0","1.1.0","3.6.5","4.5.0","4.5.0","0.6.37","1.1.4","1.0.3","1.2.0","0.5.3","0.1.4","1.8.0","4.5.0","4.5.0","0.5.8.1","1.6.4","1.6.16","2.2.1","0.1.4","2.0.0","1.50","1.4.2","1.0.4","1.9.4","2.0.3","4.5.0","0.13","4.2.8","1.10.2","2.0.3","1.3.2","1.0.4","2.6.1","1.0.14","1.4.5","1.1.6","2.29","0.17.1","0.4.10","1.10.0","0.11.1","4.5.0","1.8.7","1.5.1","3.2.1","1.3.1","1.2.1","0.3.0","4.5.0","4.5.0","0.6.5","0.52","1.8-4","2.3.10","2.3.3"]}]}]}
 </script>
 <!--/html_preserve-->
 

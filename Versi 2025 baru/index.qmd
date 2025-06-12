@@ -1,7 +1,7 @@
 ---
 title: "AppSheet Converter"
 format: dashboard
-theme: sandstone
+theme: spacelab
 execute: 
   echo: false
 server: shiny
@@ -18,6 +18,8 @@ library(tidyr)
 library(openxlsx)
 library(janitor)
 library(readxl)
+library(bslib)
+library(readxl)
 
 ```
 
@@ -25,11 +27,13 @@ library(readxl)
 
 **_AppSheet Converter_ 2025**
 
+Digunakan untuk mengkonversi data _input_ dari aplikasi _Appsheet_ tim __Distribution Development Nutrifood__.
+
 Dibuat dengan __R__.
 
 _Last Update_: 12 Juni 2025
 
-[ikanx101.com](ikanx101.com)
+[ikanx101.com](https://ikanx101.com/)
 
 # CONVERTER
 
@@ -37,28 +41,31 @@ _Last Update_: 12 Juni 2025
 
 ### Column {width = 50%}
 
-::: {style="font-size: 90%;"}
 _Converter_ ini dibuat untuk mengubah data hasil _input_ __AppSheet: Call__ ke bentuk tabular yang lebih _excel-user-friendly_.
+
+::: {style="font-size: 80%;"}
 
 Cara pakai:
 
-1. Klik tombol `Connect` pada pojok kanan atas untuk menyalakan _server cloud Google Colab_.
 1. _Upload_ dua _files_ yang dibutuhkan, yakni:
     - Data __AppSheet: Call__. Nama _sheet_ tempat data yang hendak dikonversi: `Merchandise`. Diharapkan penamaan _sheet_ ini __tidak berubah__.
     - Data _master item_.
 1. Klik `Run all`.
-1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu 5-10 menit.
-1. Silakan _download file_ hasil.
+1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu sekitar 5 menit.
+1. Silakan _download file_ hasil konversi.
+
+__Keterangan__: Nama _files_ yang di-_upload_ bebas tidak ditentukan tapi nama _sheet_ yang hendak dikonversi harus bernama `Merchandise`.
 :::
 
 ```{r}
 #| title: "Converter CALL"
 
-fileInput('nama_file_utama', 'Pilih file: raw data AppSheet')
-fileInput('nama_file_harga', 'Pilih file: database harga')
+fileInput('nama_file_call', 'Pilih file: raw data AppSheet: CALL')
+fileInput('nama_file_master', 'Pilih file: database harga')
 
 # kita bikin button
-actionButton("do", "Run all")
+actionButton("run_1", "Run all")
+textOutput("txt_1")
 
 # download parameter
 downloadButton("download_call", "Download Hasil Konversi")
@@ -68,19 +75,219 @@ downloadButton("download_call", "Download Hasil Konversi")
 
 ### Column {width = 50%}
 
-Lalala
+_Converter_ ini dibuat untuk mengubah data hasil _input_ __AppSheet: MDS__ ke bentuk tabular yang lebih _excel-user-friendly_.
 
----
+::: {style="font-size: 80%;"}
+Cara pakai:
 
+1. _Upload_ _file_ yang dibutuhkan, yakni:
+    - Data __AppSheet: MDS__.
+1. Klik `Run all`.
+1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu 5 menit.
+1. Silakan _download file_ hasil konversi.
 
+__Keterangan__: Nama _file_ yang di-_upload_ bebas tidak ditentukan.
+:::
+
+```{r}
+#| title: "Converter MDS"
+
+fileInput('nama_file_mds', 'Pilih file: raw data AppSheet: MDS')
+textInput('nama_sheet_mds', 'Nama sheet yang hendak diproses:')
+
+# kita bikin button
+actionButton("run_2", "Run all")
+textOutput("txt_2")
+
+# download parameter
+downloadButton("download_mds", "Download Hasil Konversi")
+
+```
 
 ```{r}
 #| context: server
-output$distPlot <- renderPlot({
-   x <- faithful[, 2]  # Old Faithful Geyser data
-   bins <- seq(min(x), max(x), length.out = input$bins + 1)
-   hist(x, breaks = bins, col = 'darkgray', border = 'white',
-        xlab = 'Waiting time to next eruption (in mins)',
-        main = 'Histogram of waiting times')
+
+# ===========================================================
+# ini adalah untuk menambah progress bar
+# tombol run_1
+text         <- reactiveVal()
+output$txt_1 <- renderText({ text() })
+
+observe({
+  withProgress( 
+    message = 'Proses konversi sedang berlangsung!', 
+    detail  = 'Sabar ya...', 
+    value   = 0, 
+    {
+      for (i in 1:40) { 
+        incProgress(1/40) 
+        Sys.sleep(0.25) 
+      } 
+      text("CALL Sudah selesai!") 
+    } 
+  ) 
+ }) |> bindEvent(input$run_1)
+
+# tombol run_2
+text         <- reactiveVal()
+output$txt_2 <- renderText({ text() })
+
+observe({
+  withProgress( 
+    message = 'Proses konversi sedang berlangsung!', 
+    detail  = 'Sabar ya...', 
+    value   = 0, 
+    {
+      for (i in 1:40) { 
+        incProgress(1/40) 
+        Sys.sleep(0.15) 
+      } 
+      text("MDS Sudah selesai!") 
+    } 
+  ) 
+ }) |> bindEvent(input$run_2)
+# ===========================================================
+  
+
+# ===========================================================
+# converter pertama
+data_konversi_1 = reactive({
+  # extract data target utama
+  sht  = "Merchandise"
+  df   = read_excel(input$nama_file_call$datapath,
+                    sheet = sht,col_types = "text")
+  
+  nama_kol    = colnames(df)
+  batas_akhir = which(nama_kol == "Durasi")
+
+  # kita save dulu variabel yang baru
+  df_baru = 
+    df %>% 
+    select(`ID Merch`,`Firestart NS`,`Firestart Hilo`,`Status Sekolah`) %>% 
+    mutate(`Tipe Transaksi` = "AV") %>% 
+    relocate(`Tipe Transaksi`,.after = `ID Merch`)
+  
+  id_penting  = 1:batas_akhir
+  kol_penting = nama_kol[id_penting]
+  
+  df_1 = df |> select(all_of(kol_penting))
+  
+  kol_penting = nama_kol[2:batas_akhir]
+  df_2 = 
+    df |> 
+    select(-all_of(kol_penting)) |> 
+    reshape2::melt(id.vars = "ID Merch") |> 
+    filter(!grepl("sku|tier|fire|status",variable,ignore.case = T)) |> 
+    mutate(variable = as.character(variable)) |> 
+    rename("Nama Item" = variable,
+           Status      = value) 
+  
+  # ambil master item
+  df_master = 
+    read_excel(input$nama_file_master$datapath) |> 
+    janitor::clean_names() |> 
+    select(item_group,category,brand) |> 
+    rename("Nama Item" = item_group,
+           Brand       = brand,
+           Category    = category)
+  
+  df_3 = df_2 |> merge(df_master,all.x = T)
+
+  # ini adalah df_final nya
+  df_final = 
+    df_1 |> 
+    merge(df_3) |> 
+    relocate(Brand,.after = "Durasi") |> 
+    relocate(Category,.after = "Brand") |> 
+    relocate(`Nama Item`,.after = "Category") |> 
+    # revisi 7 maret
+    filter(!Status %in% c("Tidak Jual")) |> 
+    filter(Status != "<NA>")
+  
+  df_final = df_final |> merge(df_baru)
+  
+  df_final$Tanggal = as.Date(as.numeric(df_final$Tanggal),
+                             origin = "1900-01-01")
+  df_final$Tanggal = df_final$Tanggal - 2
+        
+  output = df_final 
+  return(output)
 })
+
+# fungsi untuk download data
+data_call = data_konversi_1
+output$download_call <- downloadHandler(
+        filename = function() {
+            paste0("Converted AppSheet Call ", Sys.time(), ".xlsx")
+        },
+        content = function(file) {
+            openxlsx::write.xlsx(data_call(), file)
+        }
+    )
+# ===========================================================    
+
+
+# ===========================================================
+# converter kedua
+data_konversi_2 = reactive({
+  # data MDS masuk
+  # file = "MDS MODERN (2).xlsx"
+  sht  = input$nama_sheet_mds %>% as.character()
+
+  df = read_excel(input$nama_file_mds$datapath,sheet = sht)
+
+  nama_kol    = colnames(df)
+  batas_akhir = which(nama_kol == "Klasifikasi Customer")
+  
+  id_penting  = 1:batas_akhir
+  kol_penting = nama_kol[id_penting]
+  
+  df_1 = df |> select(all_of(kol_penting))
+  
+  kol_penting = nama_kol[2:batas_akhir]
+  df_2 = 
+    df |> 
+    select(-all_of(kol_penting)) |> 
+    reshape2::melt(id.vars = "ID") |> 
+    mutate(variable = as.character(variable)) |>
+    filter(value != "N/A") |> 
+    filter(value != "Tidak Jual") |> 
+    rename("Products"      = variable,
+           "Status Produk" = value) 
+  
+  df_final = 
+    df_1 |> 
+    merge(df_2) |> 
+    janitor::clean_names() |> 
+    mutate(amount = 0) |> 
+    mutate(brand = case_when(
+      grepl("hi lo",products,ignore.case = T) ~ "Hi Lo",
+      grepl("l-men",products,ignore.case = T) ~ "L-Men",
+      grepl("ns",products,ignore.case = T) ~ "NutriSari",
+      grepl("ts",products,ignore.case = T) ~ "Tropicana Slim",
+      grepl("hi lo",products,ignore.case = T) ~ "Hi Lo"
+    )) |> 
+    select(tanggal,nama_mds_spg,region,klasifikasi_customer,customer_name,customer_code,
+           products,amount,status_produk,brand,divisi)
+  
+  colnames(df_final) = c("Submission Date","Pic","Area","Klasifikasi Customer","Customer Name",
+                         "Customer Code","Products","Amount","Status Produk","Brand","DIV")
+  
+  output = df_final
+  return(output)
+})
+
+# fungsi untuk download data
+data_mds = data_konversi_2
+output$download_mds <- downloadHandler(
+        filename = function() {
+            paste0("Converted AppSheet MDS ", Sys.time(), ".xlsx")
+        },
+        content = function(file) {
+            openxlsx::write.xlsx(data_mds(), file)
+        }
+    )
+# ===========================================================  
+
 ```
+

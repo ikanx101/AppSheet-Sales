@@ -1,0 +1,86 @@
+---
+title: "AppSheet Converter"
+format: dashboard
+theme: sandstone
+execute: 
+  echo: false
+server: shiny
+---
+
+```{r}
+#| context: setup
+#| include: false
+rm(list=ls())
+gc()
+
+library(dplyr)
+library(tidyr)
+library(openxlsx)
+library(janitor)
+library(readxl)
+
+```
+
+# {.sidebar}
+
+**_AppSheet Converter_ 2025**
+
+Dibuat dengan __R__.
+
+_Last Update_: 12 Juni 2025
+
+[ikanx101.com](ikanx101.com)
+
+# CONVERTER
+
+## Row
+
+### Column {width = 50%}
+
+::: {style="font-size: 90%;"}
+_Converter_ ini dibuat untuk mengubah data hasil _input_ __AppSheet: Call__ ke bentuk tabular yang lebih _excel-user-friendly_.
+
+Cara pakai:
+
+1. Klik tombol `Connect` pada pojok kanan atas untuk menyalakan _server cloud Google Colab_.
+1. _Upload_ dua _files_ yang dibutuhkan, yakni:
+    - Data __AppSheet: Call__. Nama _sheet_ tempat data yang hendak dikonversi: `Merchandise`. Diharapkan penamaan _sheet_ ini __tidak berubah__.
+    - Data _master item_.
+1. Klik `Run all`.
+1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu 5-10 menit.
+1. Silakan _download file_ hasil.
+:::
+
+```{r}
+#| title: "Converter CALL"
+
+fileInput('nama_file_utama', 'Pilih file: raw data AppSheet')
+fileInput('nama_file_harga', 'Pilih file: database harga')
+
+# kita bikin button
+actionButton("do", "Run all")
+
+# download parameter
+downloadButton("download_call", "Download Hasil Konversi")
+
+```
+
+
+### Column {width = 50%}
+
+Lalala
+
+---
+
+
+
+```{r}
+#| context: server
+output$distPlot <- renderPlot({
+   x <- faithful[, 2]  # Old Faithful Geyser data
+   bins <- seq(min(x), max(x), length.out = input$bins + 1)
+   hist(x, breaks = bins, col = 'darkgray', border = 'white',
+        xlab = 'Waiting time to next eruption (in mins)',
+        main = 'Histogram of waiting times')
+})
+```

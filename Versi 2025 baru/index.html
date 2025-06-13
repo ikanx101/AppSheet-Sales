@@ -278,34 +278,34 @@ Converter Jawa Timur
 <div class="card-body html-fill-item html-fill-container">
 <div class="cell-output-display html-fill-item html-fill-container">
 <div class="form-group shiny-input-container html-fill-item html-fill-container">
-<label class="control-label" id="nama_file_jatim_1-label" for="nama_file_jatim_1">Pilih file: raw data AppSheet: Jawa Timur</label>
+<label class="control-label" id="nama_file_jatim_app-label" for="nama_file_jatim_app">Pilih file: raw data AppSheet: Jawa Timur</label>
 <div class="input-group html-fill-item html-fill-container">
 <label class="input-group-btn input-group-prepend">
 <span class="btn btn-default btn-file">
 Browse...
-<input id="nama_file_jatim_1" class="shiny-input-file" name="nama_file_jatim_1" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
+<input id="nama_file_jatim_app" class="shiny-input-file" name="nama_file_jatim_app" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
 </span>
 </label>
 <input type="text" class="form-control" placeholder="No file selected" readonly="readonly">
 </div>
-<div id="nama_file_jatim_1_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
+<div id="nama_file_jatim_app_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
 <div class="progress-bar html-fill-item html-fill-container"></div>
 </div>
 </div>
 </div>
 <div class="cell-output-display html-fill-item html-fill-container">
 <div class="form-group shiny-input-container html-fill-item html-fill-container">
-<label class="control-label" id="nama_file_jatim_2-label" for="nama_file_jatim_2">Pilih file: Master Item</label>
+<label class="control-label" id="nama_file_jatim_master-label" for="nama_file_jatim_master">Pilih file: Master Item</label>
 <div class="input-group html-fill-item html-fill-container">
 <label class="input-group-btn input-group-prepend">
 <span class="btn btn-default btn-file">
 Browse...
-<input id="nama_file_jatim_2" class="shiny-input-file" name="nama_file_jatim_2" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
+<input id="nama_file_jatim_master" class="shiny-input-file" name="nama_file_jatim_master" type="file" style="position: absolute !important; top: -99999px !important; left: -99999px !important;">
 </span>
 </label>
 <input type="text" class="form-control" placeholder="No file selected" readonly="readonly">
 </div>
-<div id="nama_file_jatim_2_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
+<div id="nama_file_jatim_master_progress" class="progress active shiny-file-input-progress html-fill-item html-fill-container">
 <div class="progress-bar html-fill-item html-fill-container"></div>
 </div>
 </div>
@@ -372,6 +372,8 @@ library(reshape2)
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
+options(shiny.maxRequestSize=50*1024^2)
+
 # ===========================================================
 # ini adalah untuk menambah progress bar
 # tombol run_1
@@ -622,6 +624,198 @@ output$download_mds <- downloadHandler(
     )
 # ===========================================================  
 
+
+
+
+# ===========================================================  
+# converter ketiga
+# fungsi untuk download data
+data_konversi_3 = reactive({
+  
+  # =========================================================
+  # kita mengambil master data item
+  file = input$nama_file_jatim_master$datapath
+  sht  = "Product"
+  df_master = 
+    read_excel(file,sheet = sht) |> 
+    janitor::clean_names() |> 
+    select(item_group,category,brand) |> 
+    rename("Nama Item" = item_group,
+           Brand       = brand,
+           Category    = category)
+  # =========================================================
+  
+  
+  # =========================================================
+  # sekarang kita ambil data utamanya
+  file = input$nama_file_jatim_app$datapath
+  sht  = c("Order","Call","Merchandise")
+  
+  # kita ambil data order, call, dan merchandise
+  df_order = 
+    read_excel(file,sheet = sht[1]) %>% 
+    janitor::clean_names() %>% 
+    mutate(tanggal = as.Date(tanggal,"%Y-%m-%d"))
+  colnames(df_order) = read_excel(file,sheet = sht[1]) %>% colnames()
+  
+  df_call = 
+    read_excel(file,sheet = sht[2]) %>% 
+    janitor::clean_names() %>% 
+    mutate(check_in  = as.POSIXlt(check_in, format="%Y-%m-%d %H:%M:%S")) %>% 
+    mutate(check_in  = format(check_in,"%H:%M:%S")) %>% 
+    mutate(check_out = as.POSIXlt(check_out, format="%Y-%m-%d %H:%M:%S")) %>% 
+    mutate(check_out = format(check_out,"%H:%M:%S")) %>% 
+    mutate(durasi    = as.POSIXlt(durasi, format="%Y-%m-%d %H:%M:%S")) %>% 
+    mutate(durasi    = format(durasi,"%H:%M:%S")) %>% 
+    mutate(tanggal   = as.Date(tanggal,"%Y-%m-%d"))
+  colnames(df_call) = read_excel(file,sheet = sht[2]) %>% colnames()
+  
+  df_av = 
+    read_excel(file,sheet = sht[3]) %>% 
+    janitor::clean_names() %>% 
+    mutate(tanggal = as.Date(tanggal,"%Y-%m-%d"))
+  colnames(df_av) = read_excel(file,sheet = sht[3]) %>% colnames()
+  # =========================================================
+  
+  # =========================================================
+  # sekarang kita akan ambil gabung call dan order
+  df_order$`Tipe Transaksi` = "Call"
+  
+  df_call_order = 
+    df_call %>% 
+    select(`ID Call`,`Check In`,
+           `Nama Cluster Firestart`,
+           `Koordinat RO`,`Koordinat Call`,`Jarak (Meter)`,`Kesesuaian Titik`,
+           `Check Out`,`Durasi`)
+  
+  df_gabung = merge(df_order,df_call_order,by = "ID Call") %>% distinct()
+  
+  df_gabung_1 =
+    df_gabung %>% 
+    mutate(`Peserta Display Wow Operator` = NA,
+           `Peserta Loyalty Sachet`       = NA,
+           `Project OTG`                  = NA,
+           `Nama Distributor`             = NA,
+           `Kecamatan Distributor`        = NA,
+           `Project 1`                    = NA,
+           `Project 2`                    = NA,
+           `Status AV`                    = NA,
+           `Berat(Gram)`                  = NA,
+           `Firestart NS`                 = NA,
+           `Firestart Hilo`               = NA
+           ) %>% 
+    mutate(`Status Sekolah` = ifelse(Sekolah == "Bukan Sekolah",FALSE,TRUE)) %>% 
+    select(`ID Order`,`ID Call`,`Check In`,`Tanggal`,`Bulan`,`ID MDS`,`Nama MDS`,
+           `PIC`,`Area MDS`,`Region MDS`,`Kode Customer`,`Nama Customer`,
+           `Kecamatan`,`Kabupaten`,`Provinsi`,`Alamat`,`Detail Klasifikasi`,
+           `Klasifikasi`,`Tipe Customer`,`Sekolah`,`Nama Cluster Firestart`,
+           `Koordinat RO`,`Koordinat Call`,`Jarak (Meter)`,`Kesesuaian Titik`,
+           `Peserta Display Wow Operator`,`Peserta Loyalty Sachet`,`Project OTG`,
+           `Nama Distributor`,`Kecamatan Distributor`,`Project 1`,`Project 2`,
+           `Check Out`,`Durasi`,`Brand`,`Category`,`Nama Item`,`Qty`,`Value`,
+           `Status AV`,`Berat(Gram)`,`Tipe Transaksi`,`Firestart NS`,`Firestart Hilo`,
+           `Status Sekolah`)
+  # =========================================================
+  
+  
+  # =========================================================
+  # sekarang kita akan gabung av dan merchandise
+  df_av_merch = 
+    df_av %>% 
+    select(`ID Merch`,`ID Call`,`Tanggal`,`Bulan`,`ID MDS`,`Nama MDS`,`PIC`,
+           `Area MDS`,`Region MDS`,`Kode Customer`,`Nama Customer`,`Kecamatan`,
+           `Kabupaten`,`Provinsi`,`Alamat`,`Detail Klasifikasi`,`Klasifikasi`,
+           `Tipe Customer`,`Sekolah`) %>% 
+    rename(`ID Order` = `ID Merch`) %>% 
+    mutate(`Tipe Transaksi` = "AV") %>% 
+    mutate(`Peserta Display Wow Operator` = NA,
+           `Peserta Loyalty Sachet`       = NA,
+           `Project OTG`                  = NA,
+           `Nama Distributor`             = NA,
+           `Kecamatan Distributor`        = NA,
+           `Project 1`                    = NA,
+           `Project 2`                    = NA,
+           `Status AV`                    = NA,
+           `Berat(Gram)`                  = NA,
+           `Firestart NS`                 = NA,
+           `Firestart Hilo`               = NA) %>% 
+    mutate(`Status Sekolah` = ifelse(Sekolah == "Bukan Sekolah",FALSE,TRUE))
+  
+  batas       = "Tier Lokalate & Wdank"
+  batas_hapus = 2:which(colnames(df_av) == batas)
+  
+  df_av_produk = 
+    df_av[-batas_hapus] %>% 
+    rename(`ID Order` = `ID Merch`) %>% 
+    melt(id.vars = "ID Order",na.rm = T) %>% 
+    filter(value > 0) %>% 
+    rename("Nama Item" = variable) %>% 
+    rename(Qty = value) %>% 
+    merge(df_master) %>% 
+    mutate(Value = NA)
+  
+  df_av_order = 
+    df_call %>% 
+    select(`ID Call`,`Check In`,
+           `Nama Cluster Firestart`,
+           `Koordinat RO`,`Koordinat Call`,`Jarak (Meter)`,`Kesesuaian Titik`,
+           `Check Out`,`Durasi`)
+  
+  df_gabung_order_1 = merge(df_av_merch,df_av_order,by = "ID Call") %>% distinct()
+  df_gabung_2       = merge(df_gabung_order_1,df_av_produk,by = "ID Order") %>% distinct()
+  
+  df_gabung_2 = 
+    df_gabung_2 %>% 
+    select(`ID Order`,`ID Call`,`Check In`,`Tanggal`,`Bulan`,`ID MDS`,`Nama MDS`,
+           `PIC`,`Area MDS`,`Region MDS`,`Kode Customer`,`Nama Customer`,
+           `Kecamatan`,`Kabupaten`,`Provinsi`,`Alamat`,`Detail Klasifikasi`,
+           `Klasifikasi`,`Tipe Customer`,`Sekolah`,`Nama Cluster Firestart`,
+           `Koordinat RO`,`Koordinat Call`,`Jarak (Meter)`,`Kesesuaian Titik`,
+           `Peserta Display Wow Operator`,`Peserta Loyalty Sachet`,`Project OTG`,
+           `Nama Distributor`,`Kecamatan Distributor`,`Project 1`,`Project 2`,
+           `Check Out`,`Durasi`,`Brand`,`Category`,`Nama Item`,`Qty`,`Value`,
+           `Status AV`,`Berat(Gram)`,`Tipe Transaksi`,`Firestart NS`,`Firestart Hilo`,
+           `Status Sekolah`)
+  
+  df_final = rbind(df_gabung_1,df_gabung_2)
+  # =========================================================
+  
+  # sekarang kita akan pecah ya
+  marker = nrow(df_final)
+  batas_pisah = 10^5
+  
+  if(marker < batas_pisah){
+    output = list(df_final)
+  }
+  if(marker > batas_pisah){
+    output_1 = df_final[1:batas_pisah,]
+    output_2 = df_final[(batas_pisah + 1):marker,]
+    output   = list(output_1,output_2)
+  }
+
+  return(output)
+  
+})
+
+data_jatim = data_konversi_3
+output$download_jatim <- downloadHandler(
+        filename = function() {
+            paste0("Converted AppSheet Jatim ", Sys.time(), ".xlsx")
+        },
+        content = function(file) {
+            # Membuat workbook baru
+            wb <- createWorkbook()
+            
+            for(ikanx in 1:length(data_jatim())){
+              sh = addWorksheet(wb, paste0("Sheet ",ikanx))
+              xl_write(data_jatim()[ikanx], wb, sh)
+            }
+            
+            # Menyimpan workbook ke file
+            saveWorkbook(wb, file)
+        }
+    )
+# ===========================================================  
 </script>
  
 <script type="application/shiny-prerendered" data-context="server-extras">

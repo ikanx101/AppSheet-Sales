@@ -21,6 +21,7 @@ library(readxl)
 library(bslib)
 library(readxl)
 library(expss)
+library(reshape2)
 
 ```
 
@@ -124,14 +125,27 @@ __Cara pakai:__
 1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu 5-10 menit.
 1. Silakan _download file_ hasil konversi.
 
-__Keterangan__: Nama _file_ yang di-_upload_ bebas tidak ditentukan.
+__Keterangan__: 
+
+1. Nama _file_ yang di-_upload_ bebas tidak ditentukan.
+1. Oleh karena __urutan kolom *output* selalu tetap, maka penamaan kolom jangan sampai berubah *ya*__.
 
 ### Column {width = 40%}
 
 ```{r}
 #| title: "Converter Jawa Timur"
 
-h1("lala")
+fileInput('nama_file_jatim_1', 'Pilih file: raw data AppSheet: Jawa Timur')
+fileInput('nama_file_jatim_2', 'Pilih file: Master Item')
+
+# kita bikin button
+actionButton("run_3", "Run all")
+textOutput("txt_3")
+
+# download parameter
+downloadButton("download_jatim", "Download Hasil Konversi")
+
+
 ```
 
 ### Column {width = 30%}
@@ -178,6 +192,25 @@ observe({
     } 
   ) 
  }) |> bindEvent(input$run_2)
+
+# tombol run_3
+text         <- reactiveVal()
+output$txt_3 <- renderText({ text() })
+
+observe({
+  withProgress( 
+    message = 'Proses konversi sedang berlangsung!', 
+    detail  = 'Sabar ya...', 
+    value   = 0, 
+    {
+      for (i in 1:60) { 
+        incProgress(1/60) 
+        Sys.sleep(0.2) 
+      } 
+      text("Jatim Sudah selesai!") 
+    } 
+  ) 
+ }) |> bindEvent(input$run_3)
 # ===========================================================
   
 

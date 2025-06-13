@@ -1,7 +1,7 @@
 ---
 title: "AppSheet Converter"
 format: dashboard
-theme: spacelab
+theme: yeti
 execute: 
   echo: false
 server: shiny
@@ -32,7 +32,7 @@ Digunakan untuk mengkonversi data _input_ dari aplikasi _Appsheet_ tim __Distrib
 
 Dibuat dengan __R__.
 
-_Last Update_: 12 Juni 2025
+_Last Update_: 13 Juni 2025 11:00 WIB
 
 [ikanx101.com](https://ikanx101.com/)
 
@@ -83,6 +83,7 @@ Cara pakai:
 
 1. _Upload_ _file_ yang dibutuhkan, yakni:
     - Data __AppSheet: MDS__.
+    - Masukkan __nama *sheet*__ yang hendak diproses.
 1. Klik `Run all`.
 1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu 5 menit.
 1. Silakan _download file_ hasil konversi.
@@ -302,10 +303,29 @@ data_konversi_2 = reactive({
     select(tanggal,nama_mds_spg,region,klasifikasi_customer,customer_name,customer_code,
            products,amount,status_produk,brand,divisi)
   
-  colnames(df_final) = c("Submission Date","Pic","Area","Klasifikasi Customer","Customer Name",
-                         "Customer Code","Products","Amount","Status Produk","Brand","DIV")
+  colnames(df_final) = c("Submission Date",
+                         "Pic","Area",
+                         "Klasifikasi Customer",
+                         "Customer Name",
+                         "Customer Code",
+                         "Products",
+                         "Amount",
+                         "Status Produk",
+                         "Brand",
+                         "DIV")
   
-  output = df_final
+  # sekarang kita akan pecah ya
+  marker      = nrow(df_final)
+  batas_pisah = 10^6
+
+  if(marker < batas_pisah){
+    output = list(df_final)
+  }
+  if(marker > batas_pisah){
+    output_1 = df_final[1:batas_pisah,]
+    output_2 = df_final[(batas_pisah + 1):marker,]
+    output   = list(output_1,output_2)
+  }
   return(output)
 })
 
@@ -316,7 +336,16 @@ output$download_mds <- downloadHandler(
             paste0("Converted AppSheet MDS ", Sys.time(), ".xlsx")
         },
         content = function(file) {
-            openxlsx::write.xlsx(data_mds(), file)
+            # Membuat workbook baru
+            wb <- createWorkbook()
+            
+            for(ikanx in 1:length(data_mds())){
+              sh = addWorksheet(wb, paste0("Sheet ",ikanx))
+              xl_write(data_mds()[ikanx], wb, sh)
+            }
+            
+            # Menyimpan workbook ke file
+            saveWorkbook(wb, file)
         }
     )
 # ===========================================================  

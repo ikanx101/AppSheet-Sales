@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN curl -LO https://github.com/quarto-dev/quarto-cli/releases/download/v1.6.42/quarto-1.6.42-linux-amd64.deb
 RUN gdebi --non-interactive quarto-1.6.42-linux-amd64.deb
 
-RUN Rscript -e "install.packages(c('dplyr','reshape2','tidyr'))"
+RUN Rscript -e "install.packages(c('dplyr','reshape2','tidyr','expss'))"
 RUN Rscript -e "install.packages(c('shiny','quarto','openxlsx'))"
 RUN Rscript -e "install.packages(c('janitor','bslib','readxl'))"
 

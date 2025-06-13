@@ -68,12 +68,20 @@ df_final$Tanggal = df_final$Tanggal - 2
 
 # sekarang kita akan pecah ya
 marker = nrow(df_final)
+batas_pisah = 50
 
-if(marker < 10^6){
-  output = df_final
+if(marker < batas_pisah){
+  output = list(df_final)
+}
+if(marker > batas_pisah){
+  output_1 = df_final[1:batas_pisah,]
+  output_2 = df_final[(batas_pisah + 1):marker,]
+  output   = list(output_1,output_2)
 }
 
-openxlsx::write.xlsx(output,file = "Call Converted.xlsx",overwrite = T)
+
+
+# openxlsx::write.xlsx(output,file = "Call Converted.xlsx",overwrite = T)
 
 
 

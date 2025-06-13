@@ -45,8 +45,7 @@ _Last Update_: 13 Juni 2025 11:00 WIB
 _Converter_ ini dibuat untuk mengubah data hasil _input_ __AppSheet: Call__ ke bentuk tabular yang lebih _excel-user-friendly_.
 
 ::: {style="font-size: 80%;"}
-
-Cara pakai:
+__Cara pakai:__
 
 1. _Upload_ dua _files_ yang dibutuhkan, yakni:
     - Data __AppSheet: Call__. Nama _sheet_ tempat data yang hendak dikonversi: `Merchandise`. Diharapkan penamaan _sheet_ ini __tidak berubah__.
@@ -79,7 +78,7 @@ downloadButton("download_call", "Download Hasil Konversi")
 _Converter_ ini dibuat untuk mengubah data hasil _input_ __AppSheet: MDS__ ke bentuk tabular yang lebih _excel-user-friendly_.
 
 ::: {style="font-size: 80%;"}
-Cara pakai:
+__Cara pakai:__
 
 1. _Upload_ _file_ yang dibutuhkan, yakni:
     - Data __AppSheet: MDS__.
@@ -108,13 +107,34 @@ downloadButton("download_mds", "Download Hasil Konversi")
 
 # _CONVERTER_ Jawa Timur
 
+## Row 
 
+### Column {width = 40%}
 
+_Converter_ ini dibuat untuk mengkonversi langsung __tiga *sheets*__ yang ada pada data tarikan __AppSheet__ dari tim DD Jawa Timur. Proses kerjanya adalah dengan _merging_ dan _enriching_ data pada _sheets_: `Order`, `Call`, dan `Merchandise` untuk kemudian di-_convert_ ke dalam satu _output file_ berformat Excel.
 
+__Cara pakai:__
 
+1. _Upload_ _files_ yang dibutuhkan, yakni:
+    - Data tarikan __AppSheet__.
+        - Perhatikan bahwa penamaan _sheets_ yang hendak diproses (`Order`, `Call`, dan `Merchandise`) __tidak boleh berubah sama sekali__. Seandainya ada perubahan, silakan kontak saya untuk penyesuaian.
+    - Data __*Master Item*__.
+        - Perhatikan bahwa _database_ _master item_ berada di _sheet_ bernama `Product`.
+1. Klik `Run all`.
+1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu 5-10 menit.
+1. Silakan _download file_ hasil konversi.
 
+__Keterangan__: Nama _file_ yang di-_upload_ bebas tidak ditentukan.
 
+### Column {width = 40%}
 
+```{r}
+#| title: "Converter Jawa Timur"
+
+h1("lala")
+```
+
+### Column {width = 30%}
 
 ```{r}
 #| context: server

@@ -255,12 +255,13 @@ grid-auto-rows: minmax(0, 1fr);">
 </ul></li>
 </ul></li>
 <li>Klik <code>Run all</code>.</li>
-<li>Tunggu hingga proses selesai (sampai muncul pesan <code>PROSES SELESAI</code>). Kira-kira akan memakan waktu 5-10 menit.</li>
+<li>Tunggu hingga proses selesai (sampai muncul pesan <code>PROSES SELESAI</code>). Kira-kira akan memakan waktu 5-15 menit.</li>
 <li>Silakan <em>download file</em> hasil konversi.</li>
 </ol>
 <p><strong>Keterangan</strong>:</p>
 <ol type="1">
 <li>Nama <em>file</em> yang di-<em>upload</em> bebas tidak ditentukan.</li>
+<li>Batas <em>filesize</em>-nya 10 MB.</li>
 <li>Oleh karena <strong>urutan kolom <em>output</em> selalu tetap, maka penamaan kolom jangan sampai berubah <em>ya</em></strong>.</li>
 </ol>
 </div>
@@ -329,7 +330,18 @@ Download Hasil Konversi
         <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
     </span>
 </bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
-</div><div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: ; grid-auto-columns: minmax(0, 1fr);">
+</div><div class="html-fill-item html-fill-container bslib-grid" style="display: grid; grid-template-rows: minmax(3em, max-content); grid-auto-columns: minmax(0, 1fr);">
+<div class="card html-fill-item html-fill-container bslib-card" data-fill="false" data-bslib-card-init="" data-require-bs-caller="card()" data-full-screen="false">
+<div class="card-body html-fill-item html-fill-container">
+<strong>Catatan</strong>
+<p>Jika <em>filesize</em> yang hendak di-<em>convert</em> memiliki ukuran &gt; 10 MB, silakan menggunakan <em>converter</em> di Google Colab berikut ini.</p>
+</div>
+<bslib-tooltip placement="auto" bsoptions="[]" data-require-bs-version="5" data-require-bs-caller="tooltip()">
+    <template>Expand</template>
+    <span class="bslib-full-screen-enter badge rounded-pill">
+        <svg xmlns="http://www.w3.org/2000/svg" viewbox="0 0 24 24" style="height:1em;width:1em;" aria-hidden="true" role="img"><path d="M20 5C20 4.4 19.6 4 19 4H13C12.4 4 12 3.6 12 3C12 2.4 12.4 2 13 2H21C21.6 2 22 2.4 22 3V11C22 11.6 21.6 12 21 12C20.4 12 20 11.6 20 11V5ZM4 19C4 19.6 4.4 20 5 20H11C11.6 20 12 20.4 12 21C12 21.6 11.6 22 11 22H3C2.4 22 2 21.6 2 21V13C2 12.4 2.4 12 3 12C3.6 12 4 12.4 4 13V19Z"></path></svg>
+    </span>
+</bslib-tooltip><script data-bslib-card-init="">bslib.Card.initializeAllCards();</script></div>
 <div id="3ade8a4a-fb1d-4a6c-8409-ac45482d5fc9" class="hidden html-fill-item html-fill-container">
 
 </div>
@@ -342,7 +354,7 @@ Download Hasil Konversi
 <p><strong><em>AppSheet Converter</em> 2025</strong></p>
 <p>Digunakan untuk mengkonversi data <em>input</em> dari aplikasi <em>Appsheet</em> tim <strong>Distribution Development Nutrifood</strong>.</p>
 <p>Dibuat dengan <strong>R</strong>.</p>
-<p><em>Last Update</em>: 13 Juni 2025 11:00 WIB</p>
+<p><em>Last Update</em>: 2025-06-16 01:07:36 UTC</p>
 <p><a href="https://ikanx101.com/">ikanx101.com</a></p>
 </div></aside>
 <button class="collapse-toggle" type="button" title="Toggle sidebar" aria-expanded="true" aria-controls="bslib-sidebar-1">
@@ -368,11 +380,12 @@ library(bslib)
 library(readxl)
 library(expss)
 library(reshape2)
+library(shiny)
 
 </script>
  
 <script type="application/shiny-prerendered" data-context="server">
-options(shiny.maxRequestSize=50*1024^2)
+options(shiny.maxRequestSize=10*1024^2)
 
 # ===========================================================
 # ini adalah untuk menambah progress bar
@@ -388,7 +401,7 @@ observe({
     {
       for (i in 1:40) { 
         incProgress(1/40) 
-        Sys.sleep(0.25) 
+        Sys.sleep(runif(1,0.25,.5)) 
       } 
       text("CALL Sudah selesai!") 
     } 
@@ -407,7 +420,7 @@ observe({
     {
       for (i in 1:40) { 
         incProgress(1/40) 
-        Sys.sleep(0.15) 
+        Sys.sleep(runif(1,0.15,.5))
       } 
       text("MDS Sudah selesai!") 
     } 
@@ -424,9 +437,9 @@ observe({
     detail  = 'Sabar ya...', 
     value   = 0, 
     {
-      for (i in 1:60) { 
-        incProgress(1/60) 
-        Sys.sleep(0.2) 
+      for (i in 1:100) { 
+        incProgress(1/100) 
+        Sys.sleep(runif(1,0.35,.6)) 
       } 
       text("Jatim Sudah selesai!") 
     } 
@@ -782,7 +795,7 @@ data_konversi_3 = reactive({
   
   # sekarang kita akan pecah ya
   marker = nrow(df_final)
-  batas_pisah = 10^5
+  batas_pisah = 300000
   
   if(marker < batas_pisah){
     output = list(df_final)
@@ -794,27 +807,35 @@ data_konversi_3 = reactive({
   }
 
   return(output)
-  
 })
 
+# fungsi untuk download data
 data_jatim = data_konversi_3
 output$download_jatim <- downloadHandler(
-        filename = function() {
-            paste0("Converted AppSheet Jatim ", Sys.time(), ".xlsx")
-        },
-        content = function(file) {
-            # Membuat workbook baru
-            wb <- createWorkbook()
-            
-            for(ikanx in 1:length(data_jatim())){
-              sh = addWorksheet(wb, paste0("Sheet ",ikanx))
-              xl_write(data_jatim()[ikanx], wb, sh)
+    filename = function() {
+        paste0("Converted AppSheet JATIM ", Sys.time(), ".xlsx")
+    },
+    content = function(file) {
+        wb <- createWorkbook()
+        n_sheets <- length(data_jatim())
+        
+        withProgress(
+            message = 'Membuat file Excel... Sabar ya...',
+            value = 0, {
+                for(ikanx in 1:n_sheets) {
+                    incProgress(1/n_sheets, 
+                                detail = paste("Sheet", ikanx))
+                    
+                    sh <- addWorksheet(wb, paste0("Sheet ", ikanx))
+                    xl_write(data_jatim()[[ikanx]], wb, sh)
+                }
+                
+                saveWorkbook(wb, file)
             }
-            
-            # Menyimpan workbook ke file
-            saveWorkbook(wb, file)
-        }
-    )
+        )
+    }
+)
+
 # ===========================================================  
 </script>
  

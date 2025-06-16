@@ -22,6 +22,7 @@ library(bslib)
 library(readxl)
 library(expss)
 library(reshape2)
+library(shiny)
 
 ```
 
@@ -33,7 +34,7 @@ Digunakan untuk mengkonversi data _input_ dari aplikasi _Appsheet_ tim __Distrib
 
 Dibuat dengan __R__.
 
-_Last Update_: 13 Juni 2025 11:00 WIB
+_Last Update_: 2025-06-16 01:07:36 UTC
 
 [ikanx101.com](https://ikanx101.com/)
 
@@ -122,13 +123,13 @@ __Cara pakai:__
     - Data __*Master Item*__.
         - Perhatikan bahwa _database_ _master item_ berada di _sheet_ bernama `Product`.
 1. Klik `Run all`.
-1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu 5-10 menit.
+1. Tunggu hingga proses selesai (sampai muncul pesan `PROSES SELESAI`). Kira-kira akan memakan waktu 5-15 menit.
 1. Silakan _download file_ hasil konversi.
 
 __Keterangan__: 
 
 1. Nama _file_ yang di-_upload_ bebas tidak ditentukan.
-1. Batas _filesize_-nya 50 MB.
+1. Batas _filesize_-nya 10 MB.
 1. Oleh karena __urutan kolom *output* selalu tetap, maka penamaan kolom jangan sampai berubah *ya*__.
 
 ### Column {width = 40%}
@@ -150,10 +151,14 @@ downloadButton("download_jatim", "Download Hasil Konversi")
 
 ### Column {width = 30%}
 
+__Catatan__
+
+Jika _filesize_ yang hendak di-_convert_ memiliki ukuran > 10 MB, silakan menggunakan _converter_ di Google Colab berikut ini.
+
 ```{r}
 #| context: server
 
-options(shiny.maxRequestSize=50*1024^2)
+options(shiny.maxRequestSize=10*1024^2)
 
 # ===========================================================
 # ini adalah untuk menambah progress bar
@@ -169,7 +174,7 @@ observe({
     {
       for (i in 1:40) { 
         incProgress(1/40) 
-        Sys.sleep(0.25) 
+        Sys.sleep(runif(1,0.25,.5)) 
       } 
       text("CALL Sudah selesai!") 
     } 
@@ -188,7 +193,7 @@ observe({
     {
       for (i in 1:40) { 
         incProgress(1/40) 
-        Sys.sleep(0.15) 
+        Sys.sleep(runif(1,0.15,.5))
       } 
       text("MDS Sudah selesai!") 
     } 
@@ -207,7 +212,7 @@ observe({
     {
       for (i in 1:100) { 
         incProgress(1/100) 
-        Sys.sleep(0.25) 
+        Sys.sleep(runif(1,0.35,.6)) 
       } 
       text("Jatim Sudah selesai!") 
     } 
@@ -563,7 +568,7 @@ data_konversi_3 = reactive({
   
   # sekarang kita akan pecah ya
   marker = nrow(df_final)
-  batas_pisah = 10^6
+  batas_pisah = 300000
   
   if(marker < batas_pisah){
     output = list(df_final)
@@ -575,27 +580,35 @@ data_konversi_3 = reactive({
   }
 
   return(output)
-  
 })
 
+# fungsi untuk download data
 data_jatim = data_konversi_3
 output$download_jatim <- downloadHandler(
-        filename = function() {
-            paste0("Converted AppSheet Jatim ", Sys.time(), ".xlsx")
-        },
-        content = function(file) {
-            # Membuat workbook baru
-            wb <- createWorkbook()
-            
-            for(ikanx in 1:length(data_jatim())){
-              sh = addWorksheet(wb, paste0("Sheet ",ikanx))
-              xl_write(data_jatim()[ikanx], wb, sh)
+    filename = function() {
+        paste0("Converted AppSheet JATIM ", Sys.time(), ".xlsx")
+    },
+    content = function(file) {
+        wb <- createWorkbook()
+        n_sheets <- length(data_jatim())
+        
+        withProgress(
+            message = 'Membuat file Excel... Sabar ya...',
+            value = 0, {
+                for(ikanx in 1:n_sheets) {
+                    incProgress(1/n_sheets, 
+                                detail = paste("Sheet", ikanx))
+                    
+                    sh <- addWorksheet(wb, paste0("Sheet ", ikanx))
+                    xl_write(data_jatim()[[ikanx]], wb, sh)
+                }
+                
+                saveWorkbook(wb, file)
             }
-            
-            # Menyimpan workbook ke file
-            saveWorkbook(wb, file)
-        }
-    )
+        )
+    }
+)
+
 # ===========================================================  
 ```
 

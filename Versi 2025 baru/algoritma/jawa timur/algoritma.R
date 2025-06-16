@@ -155,7 +155,29 @@ df_gabung_2 =
 
 df_final = rbind(df_gabung_1,df_gabung_2)
 
+# sekarang kita akan pecah ya
+marker = nrow(df_final)
+batas_pisah = 10^6
 
+if(marker < batas_pisah){
+  output = list(df_final)
+}
+if(marker > batas_pisah){
+  output_1 = df_final[1:batas_pisah,]
+  output_2 = df_final[(batas_pisah + 1):marker,]
+  output   = list(output_1,output_2)
+}
+
+data_jatim = output
+wb <- createWorkbook()
+
+for(ikanx in 1:length(data_jatim)){
+  sh = addWorksheet(wb, paste0("Sheet ",ikanx))
+  xl_write(data_jatim[ikanx], wb, sh)
+}
+
+# Menyimpan workbook ke file
+saveWorkbook(wb, "nama.xlsx",overwrite = T)
 
 
 

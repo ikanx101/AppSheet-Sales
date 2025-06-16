@@ -38,8 +38,8 @@ CMD ["/usr/bin/shiny-server"]
 
 
 #docker build -t ikanx101/appsheet_converter . 
-#sudo docker tag ikanx101/appsheet_converter:latest ikanx101/appsheet_converter
-#sudo docker push ikanx101/appsheet_converter:latest
+#docker tag ikanx101/appsheet_converter:latest ikanx101/appsheet_converter
+#docker push ikanx101/appsheet_converter:latest
 
 
 

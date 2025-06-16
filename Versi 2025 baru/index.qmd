@@ -153,7 +153,9 @@ downloadButton("download_jatim", "Download Hasil Konversi")
 
 __Catatan__
 
-Jika _filesize_ yang hendak di-_convert_ memiliki ukuran > 10 MB, silakan menggunakan _converter_ di Google Colab berikut ini.
+Jika _filesize_ yang hendak di-_convert_ memiliki ukuran > 10 MB, silakan menggunakan _converter_ di [__Google Colab__ berikut ini](https://colab.research.google.com/drive/1q3bS-dzvABDz9-KywnzrDGJHlD_YOlZ7?usp=sharing).
+
+Oleh karena datanya besar dan diproses menggunakan _server_ Google, jadi harap bersabar ya.
 
 ```{r}
 #| context: server

@@ -115,13 +115,7 @@ hasil_akhir =
          hrg_satuan,disc_satuan,disc_total,total_net,brand,jenis_faktur)
 
 openxlsx::write.xlsx(hasil_akhir,file = "converted.xlsx")
-
-
-
-
-
-
-
+# ==============================================================================
 
 
 

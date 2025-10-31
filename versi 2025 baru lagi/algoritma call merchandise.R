@@ -6,6 +6,7 @@ library(tidyr)
 library(openxlsx)
 library(janitor)
 library(readxl)
+library(expss)
 
 # call
 file = "Call sample.xlsx"
@@ -98,15 +99,14 @@ df_finalista =
   relocate("Qty",.after = "Kode Item") %>% 
   relocate("Value",.after = "Qty") %>%
   rename("Status AV" = Status) %>% 
-  relocate("Berat(Gram)",.after = "Status AV") %>% 
-  head(5)
+  relocate("Berat(Gram)",.after = "Status AV") 
 
 # ini kita simpulkan cerita akhirnya
 df_final = df_finalista
 
 # sekarang kita akan pecah ya
-marker = nrow(df_final)
-batas_pisah = 50
+marker      = nrow(df_final)
+batas_pisah = 10^6
 
 if(marker < batas_pisah){
   output = list(df_final)
@@ -117,10 +117,14 @@ if(marker > batas_pisah){
   output   = list(output_1,output_2)
 }
 
+data_jatim = output
+wb <- createWorkbook()
 
-# kita save dulu
-openxlsx::write.xlsx(output,
-                     file = "Hasil convert Merchandise.xlsx",
-                     overwrite = T)
+for(ikanx in 1:length(data_jatim)){
+  sh = addWorksheet(wb, paste0("Sheet ",ikanx))
+  xl_write(data_jatim[ikanx], wb, sh)
+}
 
+# Menyimpan workbook ke file
+saveWorkbook(wb, file = "Hasil convert Merchandise.xlsx",overwrite = T)
 

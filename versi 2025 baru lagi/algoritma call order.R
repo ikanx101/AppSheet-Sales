@@ -48,7 +48,8 @@ df_final =
   relocate("Status AV",.after = "Value") %>% 
   relocate("Berat(Gram)",.after = "Status AV") %>% 
   relocate("Tipe Transaksi",.after = "Berat(Gram)") %>% 
-  relocate("Jenis MDS",.after = "Jenis MDS")
+  relocate("Jenis MDS",.after = "Jenis MDS") %>% 
+  mutate(Tanggal = as.Date(Tanggal,"%Y-%m-%d"))
 
 
 df_final 

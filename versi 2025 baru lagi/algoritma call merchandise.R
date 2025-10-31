@@ -99,7 +99,8 @@ df_finalista =
   relocate("Qty",.after = "Kode Item") %>% 
   relocate("Value",.after = "Qty") %>%
   rename("Status AV" = Status) %>% 
-  relocate("Berat(Gram)",.after = "Status AV") 
+  relocate("Berat(Gram)",.after = "Status AV") %>% 
+  mutate(Tanggal = as.Date(Tanggal,"%Y-%m-%d"))
 
 # ini kita simpulkan cerita akhirnya
 df_final = df_finalista

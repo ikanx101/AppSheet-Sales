@@ -6,12 +6,12 @@ library(dplyr)
 library(tidyr)
 library(janitor)
 
-setwd("~/AppSheet-Sales/Jevon")
+setwd("~/AppSheet-Sales/Jevon 2025")
 
 # ==============================================================================
 # tahap 1
 # baca semua data frame dalam file
-file = "X lap penjualan Nutrisari dan Hilo.xlsx"
+file = "Lap Penjualan Subdist KERINCI (Okt 2025).xlsx"
 df   = read_excel(file,col_names = F) %>% clean_names()
 # ==============================================================================
 
@@ -114,7 +114,7 @@ hasil_akhir =
          nama_salesman,kode_item,nama_item,qty_barang,satuan,
          hrg_satuan,disc_satuan,disc_total,total_net,brand,jenis_faktur)
 
-openxlsx::write.xlsx(hasil_akhir,file = "converted.xlsx")
+openxlsx::write.xlsx(hasil_akhir,file = "converted v2.xlsx")
 # ==============================================================================
 
 

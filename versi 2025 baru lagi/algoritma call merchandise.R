@@ -9,9 +9,9 @@ library(readxl)
 library(expss)
 
 # call
-file = "Call sample.xlsx"
+nama_file_call = "Call sample.xlsx"
 sht  = "Merchandise"
-df   = read_excel(file,sheet = sht,col_types = "text")
+df   = read_excel(nama_file_call,sheet = sht,col_types = "text")
 
 nama_kol    = colnames(df)
 batas_akhir = which(nama_kol == "Durasi")
@@ -39,9 +39,9 @@ df_2 =
          Status      = value) 
 
 # master item
-file = "Master Item.xlsx"
+nama_file_master = "Master Item.xlsx"
 df_master = 
-  read_excel(file) |> 
+  read_excel(nama_file_master) |> 
   janitor::clean_names() |> 
   # ini revisi 31 Oktober 2025
   select(item_group,category,brand,item_group_code) |> 
@@ -70,7 +70,7 @@ df_final = df_final |> merge(df_baru) %>% select(-"Tanggal")
 # ini tambahannya
 # kita ambil dari sheet call
 sht  = "Call"
-df   = read_excel("Call sample.xlsx",sheet = sht,col_types = "text")
+df   = read_excel(nama_file_call,sheet = sht,col_types = "text")
 
 df$Tanggal = as.Date(as.numeric(df$Tanggal),origin = "1900-01-01")
 df$Tanggal = df$Tanggal - 2

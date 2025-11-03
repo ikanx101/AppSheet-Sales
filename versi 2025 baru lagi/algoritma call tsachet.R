@@ -9,14 +9,14 @@ library(readxl)
 library(expss)
 
 # call
-file = "Call sample.xlsx"
+nama_file_call = "Call sample.xlsx"
 sht  = "TSachet"
-df   = read_excel(file,sheet = sht,col_types = "text") %>% rename("ID Order" = IDdetail)
+df   = read_excel(nama_file_call,sheet = sht,col_types = "text") %>% rename("ID Order" = IDdetail)
 
 # master item
-file = "Master Item.xlsx"
+nama_file_master = "Master Item.xlsx"
 df_master = 
-  read_excel(file) |> 
+  read_excel(nama_file_master) |> 
   janitor::clean_names() |> 
   # ini revisi 31 Oktober 2025
   select(item_group,item_group_code) |> 
@@ -24,20 +24,11 @@ df_master =
          "Kode Item" = item_group_code)
 
 # kita gabung dulu
-df_1 = merge(df,df_master,by = "Nama Item") %>% select(-"Check In",-"Check Out",-"Durasi",-"Tanggal")
-
-# kita ambil dari sheet call
-sht  = "Call"
-df   = read_excel("Call sample.xlsx",sheet = sht,col_types = "text")
-
-df$Tanggal = as.Date(as.numeric(df$Tanggal),origin = "1900-01-01")
-df$Tanggal = df$Tanggal - 2
-
-df_call = df %>% select("ID Call","Tanggal","Check In","Check Out","Durasi")
+df_1 = merge(df,df_master,by = "Nama Item")
 
 # sekarang kita gabung semua
 df_final = 
-  merge(df_1,df_call,by = "ID Call",all.x = T) %>% 
+  df_1 %>%  
   select("ID Order","ID Call","Check In","Tanggal","Bulan","ID MDS","Nama MDS","PIC",
          "Area MDS","Region MDS","Kode Customer","Nama Customer","Kecamatan","Kabupaten","Provinsi",
          "Alamat","Detail Klasifikasi","Klasifikasi","Tipe Customer","Sekolah","Nama Cluster Firestart",

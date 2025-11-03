@@ -24,16 +24,20 @@ df_master =
          "Kode Item" = item_group_code)
 
 # kita gabung dulu
-df_1 = merge(df,df_master,by = "Nama Item") %>% select(-"Check In",-"Check Out",-"Durasi")
+df_1 = merge(df,df_master,by = "Nama Item") %>% select(-"Check In",-"Check Out",-"Durasi",-"Tanggal")
 
 # kita ambil dari sheet call
 sht  = "Call"
 df   = read_excel("Call sample.xlsx",sheet = sht,col_types = "text")
-df_call = df %>% select("ID Call","Check In","Check Out","Durasi")
+
+df$Tanggal = as.Date(as.numeric(df$Tanggal),origin = "1900-01-01")
+df$Tanggal = df$Tanggal - 2
+
+df_call = df %>% select("ID Call","Tanggal","Check In","Check Out","Durasi")
 
 # sekarang kita gabung semua
 df_final = 
-  merge(df_1,df_call,by = "ID Call") %>% 
+  merge(df_1,df_call,by = "ID Call",all.x = T) %>% 
   select("ID Order","ID Call","Check In","Tanggal","Bulan","ID MDS","Nama MDS","PIC","Area MDS",
          "Region MDS","Kode Customer","Nama Customer","Kecamatan","Kabupaten","Provinsi","Alamat",
          "Detail Klasifikasi","Klasifikasi","Tipe Customer","Sekolah","Nama Cluster Firestart",
@@ -76,5 +80,5 @@ for(ikanx in 1:length(data_jatim)){
 }
 
 # Menyimpan workbook ke file
-saveWorkbook(wb, file = "Hasil convert Order.xlsx",overwrite = T)
+saveWorkbook(wb, file = "Hasil convert Order v2.xlsx",overwrite = T)
 

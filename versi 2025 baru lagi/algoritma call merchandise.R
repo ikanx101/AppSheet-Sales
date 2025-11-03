@@ -64,19 +64,18 @@ df_final =
   filter(!Status %in% c("Tidak Jual")) |> 
   filter(Status != "<NA>")
 
-df_final = df_final |> merge(df_baru)
-
-df_final$Tanggal = as.Date(as.numeric(df_final$Tanggal),
-                           origin = "1900-01-01")
-df_final$Tanggal = df_final$Tanggal - 2
-
+df_final = df_final |> merge(df_baru) %>% select(-"Tanggal")
 
 # ini revisi 31 Oktober 2025
 # ini tambahannya
 # kita ambil dari sheet call
 sht  = "Call"
 df   = read_excel("Call sample.xlsx",sheet = sht,col_types = "text")
-df_call = df %>% select("ID Call","Check In","Check Out","Durasi")
+
+df$Tanggal = as.Date(as.numeric(df$Tanggal),origin = "1900-01-01")
+df$Tanggal = df$Tanggal - 2
+
+df_call = df %>% select("ID Call","Tanggal","Check In","Check Out","Durasi")
 
 # sekarang kita ganti isinya
 df_finalista = 
@@ -86,7 +85,8 @@ df_finalista =
   arrange("ID Call") %>% 
   relocate("Check In",.after = "ID Call") %>% 
   relocate("Durasi",.before = "Brand") %>% 
-  relocate("Check Out",.before = "Durasi")
+  relocate("Check Out",.before = "Durasi") %>% 
+  relocate("Tanggal",.after = "Check In")
 
 # kita tambahin lagi ya
 df_finalista = 
@@ -127,5 +127,5 @@ for(ikanx in 1:length(data_jatim)){
 }
 
 # Menyimpan workbook ke file
-saveWorkbook(wb, file = "Hasil convert Merchandise.xlsx",overwrite = T)
+saveWorkbook(wb, file = "Hasil convert Merchandise v2.xlsx",overwrite = T)
 

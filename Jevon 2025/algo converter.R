@@ -22,7 +22,7 @@ df   = read_excel(file,col_names = F) %>% clean_names()
 # caranya dengan mengecek ada di mana saja tabelnya
 
 # kita cek dulu tabel header ada di mana saja
-marker_1 = (1:nrow(df))[which(grepl("customer",df$x2,ignore.case = T))]
+marker_1 = (1:nrow(df))[which(grepl("pelanggan",df$x2,ignore.case = T))]
 # karena yang akhir gak ada pasangan, kita tambahin manual
 marker_1 = c(marker_1,nrow(df))
 
@@ -65,7 +65,7 @@ for(ikanx in 1:length(hasil_generate)){
   # rapihin nama kolomnya
   colnames(temp) = temp[1,]
   # hapus kolom tak perlu
-  temp = temp %>% clean_names() %>% filter(unit != "Unit")
+  temp = temp %>% clean_names() %>% filter(sat != "Sat.")
   # tambahin nama costumer
   temp = temp %>% mutate(nama_customer)
   
@@ -83,7 +83,7 @@ gabung_tabel = data.table::rbindlist(rumah_kita) %>% as.data.frame()
 # trus kita rapihin tabelnya
 hasil_akhir = 
   gabung_tabel %>% 
-  mutate(nama_customer = gsub("CUSTOMER : ","",nama_customer,fixed = T)) %>%
+  mutate(nama_customer = gsub("PELANGGAN : ","",nama_customer,fixed = T)) %>%
   mutate(nama_toko = stringr::str_squish(nama_customer)) %>% 
   separate(nama_customer,
            into = c("hapus","kode_toko"),
@@ -99,17 +99,17 @@ hasil_akhir =
          hrg_satuan = NA,
          disc_total = NA) %>% 
   mutate(brand = case_when(
-    grepl("NS|nutri|sari",product_name,ignore.case = T) ~ "NS",
-    grepl("hilo|hi lo|hl",product_name,ignore.case = T) ~ "HiLo",
-    grepl("ts|tropica",product_name,ignore.case = T) ~ "TS",
-    grepl("lmen|l men|l-men",product_name,ignore.case = T) ~ "LMen"
+    grepl("NS|nutri|sari",nama,ignore.case = T) ~ "NS",
+    grepl("hilo|hi lo|hl",nama,ignore.case = T) ~ "HiLo",
+    grepl("ts|tropica",nama,ignore.case = T) ~ "TS",
+    grepl("lmen|l men|l-men",nama,ignore.case = T) ~ "LMen"
   )) %>% 
-  rename(kode_item = product_id,
-         nama_item = product_name,
-         qty_barang = qty_amount,
-         satuan = unit,
-         disc_satuan = discount,
-         total_net = total_invoice) %>% 
+  rename(kode_item = kode,
+         nama_item = nama,
+         qty_barang = gross,
+         satuan = sat,
+         disc_satuan = diskon,
+         total_net = total_tagihan) %>% 
   select(no_faktur,bln_faktur,tgl_faktur,kode_toko,nama_toko,alamat_toko,
          nama_salesman,kode_item,nama_item,qty_barang,satuan,
          hrg_satuan,disc_satuan,disc_total,total_net,brand,jenis_faktur)

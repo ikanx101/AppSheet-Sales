@@ -9,12 +9,21 @@ library(readxl)
 library(expss)
 
 # call
-nama_file_call = "Call sample.xlsx"
+nama_file_call = "Call (9).xlsx"
 sht  = "TSachet"
 df   = read_excel(nama_file_call,sheet = sht,col_types = "text") %>% rename("ID Order" = IDdetail)
 
+# benerin tanggal
+# 25 november 2025
+df = 
+  df |> 
+  mutate(Tanggal = as.numeric(Tanggal)) |> 
+  rowwise() |> 
+  mutate(Tanggal = as.Date(Tanggal, origin = "1899-12-30")) |> 
+  ungroup()
+
 # master item
-nama_file_master = "Master Item.xlsx"
+nama_file_master = "Master Item (4).xlsx"
 df_master = 
   read_excel(nama_file_master) |> 
   janitor::clean_names() |> 
@@ -72,4 +81,4 @@ for(ikanx in 1:length(data_jatim)){
 }
 
 # Menyimpan workbook ke file
-saveWorkbook(wb, file = "Hasil convert TS Sachet v2.xlsx",overwrite = T)
+# saveWorkbook(wb, file = "Hasil convert TS Sachet v2.xlsx",overwrite = T)

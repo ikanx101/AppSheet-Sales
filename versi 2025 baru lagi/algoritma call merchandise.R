@@ -8,6 +8,8 @@ library(janitor)
 library(readxl)
 library(expss)
 
+# mau mengajukan perubahan tipe data terkait kolom Check in, Check out dan Durasi ,,formatnya dibuat time,,
+
 # call
 nama_file_call = "Call sample.xlsx"
 sht  = "Merchandise"
@@ -76,6 +78,58 @@ df$Tanggal = as.Date(as.numeric(df$Tanggal),origin = "1900-01-01")
 df$Tanggal = df$Tanggal - 2
 
 df_call = df %>% select("ID Call","Tanggal","Check In","Check Out","Durasi")
+
+
+# ====================================================================
+# ini adalah tambahan daripada request akhir taun
+
+# fungsi untuk mengubah menjadi check in dan check out
+ubahin_waktu = function(tes){
+  # tes <- "0.35410879629629627"
+  tes_numeric <- as.numeric(tes)
+  
+  # Konversi
+  detik_total <- tes_numeric * 86400
+  jam <- floor(detik_total / 3600)
+  menit <- floor((detik_total %% 3600) / 60)
+  detik <- round(detik_total %% 60)
+  
+  # Format AM/PM
+  if (jam >= 12) {
+    periode <- "PM"
+    if (jam > 12) jam <- jam - 12
+  } else {
+    periode <- "AM"
+    if (jam == 0) jam <- 12
+  }
+  
+  hasil <- sprintf("%d:%02d:%02d %s", jam, menit, detik, 
+                   periode)
+  # hasil
+  return(hasil)
+}
+
+df_call$`Check In` = sapply(df_call$`Check In`,ubahin_waktu)
+df_call$`Check Out`= sapply(df_call$`Check Out`,ubahin_waktu)
+
+# fungsi untuk mengubah menjadi durasi
+ubahin_waktu = function(tes){
+  # tes <- "0.35410879629629627"
+  tes_numeric <- as.numeric(tes)
+  
+  # Konversi
+  detik_total <- tes_numeric * 86400
+  jam <- floor(detik_total / 3600)
+  menit <- floor((detik_total %% 3600) / 60)
+  detik <- round(detik_total %% 60)
+  
+  hasil <- sprintf("%d:%02d:%02d", jam, menit, detik)
+  # hasil
+  return(hasil)
+}
+
+df_call$Durasi = sapply(df_call$Durasi,ubahin_waktu)
+# ====================================================================
 
 # sekarang kita ganti isinya
 df_finalista = 

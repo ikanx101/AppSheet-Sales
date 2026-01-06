@@ -80,6 +80,8 @@ convert_1 = tabItem(tabName = 'converter_1',
                              fileInput('file_mtr_1', 'File Master Item',
                                        accept = c('xlsx')
                              ),
+                             br(),
+                             h5("Tunggu 2 - 4 menit hingga selesai ya."),
                              downloadButton("downloadData_1", "Download")
                       )
                     )
@@ -99,6 +101,8 @@ convert_2 = tabItem(tabName = 'converter_2',
                              fileInput('file_mtr_2', 'File Master Item',
                                        accept = c('xlsx')
                              ),
+                             br(),
+                             h5("Tunggu 2 - 4 menit hingga selesai ya."),
                              downloadButton("downloadData_2", "Download")
                       )
                     )
@@ -117,6 +121,8 @@ convert_3 = tabItem(tabName = 'converter_3',
                              fileInput('file_mtr_3', 'File Master Item',
                                        accept = c('xlsx')
                              ),
+                             br(),
+                             h5("Tunggu 2 - 4 menit hingga selesai ya."),
                              downloadButton("downloadData_3", "Download")
                       )
                     )
@@ -136,15 +142,16 @@ server <- function(input,output,session){
   # credential untuk masalah login
   res_auth = secure_server(check_credentials = check_credentials(credentials))
   
+  # =======================================================
+  # konverter pertama
+  # call merchandise
+  
   # konverter dimulai dari sini
-  data_upload <- reactive({
+  data_upload_1 <- reactive({
     # tahap pertama adalah mengambil data yang diupload
     inFile <- input$target_upload
     if (is.null(inFile))
       return(NULL)
-    
-    # kita ambil nama kota dulu
-    nama_kota_save = input$judul_area
     
     # baca data
     df <- read_excel(inFile$datapath) %>% janitor::clean_names() 
@@ -159,15 +166,133 @@ server <- function(input,output,session){
     
   })
   
-  data = data_upload
+  data_1 = data_upload_1
   
-  output$downloadData <- downloadHandler(
+  output$downloadData_1 <- downloadHandler(
     filename = function() {
-      paste("MSA Jotform ", nama_kota_save(),Sys.time(), ".xlsx", sep=" ")
+      paste0("Call Merchandise Converted - ",Sys.time(), ".xlsx")
     },
     content = function(file) {
-      openxlsx::write.xlsx(data(), file)
+      openxlsx::write.xlsx(data_1(), file)
     })
+  # =======================================================
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  # =======================================================
+  # konverter kedua
+  # call order
+  
+  # konverter dimulai dari sini
+  data_upload_2 <- reactive({
+    # tahap pertama adalah mengambil data yang diupload
+    inFile <- input$target_upload
+    if (is.null(inFile))
+      return(NULL)
+    
+    # baca data
+    df <- read_excel(inFile$datapath) %>% janitor::clean_names() 
+    
+    # =================================
+    # mulai paste dari sini
+    
+    
+    # =================================
+    # akhir paste di sini
+    return(df_final)
+    
+  })
+  
+  data_2 = data_upload_2
+  
+  output$downloadData_2 <- downloadHandler(
+    filename = function() {
+      paste0("Call Order Converted - ",Sys.time(), ".xlsx")
+    },
+    content = function(file) {
+      openxlsx::write.xlsx(data_2(), file)
+    })
+  # =======================================================
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  # =======================================================
+  # konverter ketiga
+  # call tukar sachet
+  
+  # konverter dimulai dari sini
+  data_upload_3 <- reactive({
+    # tahap pertama adalah mengambil data yang diupload
+    inFile <- input$target_upload
+    if (is.null(inFile))
+      return(NULL)
+    
+    # baca data
+    df <- read_excel(inFile$datapath) %>% janitor::clean_names() 
+    
+    # =================================
+    # mulai paste dari sini
+    
+    
+    # =================================
+    # akhir paste di sini
+    return(df_final)
+    
+  })
+  
+  data_3 = data_upload_3
+  
+  output$downloadData_3 <- downloadHandler(
+    filename = function() {
+      paste0("Call TSachet Converted - ",Sys.time(), ".xlsx")
+    },
+    content = function(file) {
+      openxlsx::write.xlsx(data_3(), file)
+    })
+  # =======================================================
+  
+  
   
   
 }

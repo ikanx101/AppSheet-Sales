@@ -11,12 +11,12 @@ library(expss)
 # mau mengajukan perubahan tipe data terkait kolom Check in, Check out dan Durasi ,,formatnya dibuat time,,
 
 # call
-nama_file_call = "Call (30).xlsx"
+nama_file_call = "Call (35) 1.xlsx"
 sht  = "Order"
 df   = read_excel(nama_file_call,sheet = sht,col_types = "text")
 
 # master item
-nama_file_master = "Master Item (4).xlsx"
+nama_file_master = "Master Item (7).xlsx"
 df_master = 
   read_excel(nama_file_master) |> 
   janitor::clean_names() |> 
@@ -26,7 +26,8 @@ df_master =
          "Kode Item" = item_group_code)
 
 # kita gabung dulu
-df_1 = merge(df,df_master,by = "Nama Item") %>% select(-"Check In",-"Check Out",-"Durasi",-"Tanggal")
+df_1 = 
+  merge(df,df_master,by = "Nama Item") %>% select(-"Check In",-"Check Out",-"Durasi",-"Tanggal")
 
 # kita ambil dari sheet call
 sht  = "Call"
@@ -35,7 +36,9 @@ df   = read_excel(nama_file_call,sheet = sht,col_types = "text")
 df$Tanggal = as.Date(as.numeric(df$Tanggal),origin = "1900-01-01")
 df$Tanggal = df$Tanggal - 2
 
-df_call = df %>% select("ID Call","Tanggal","Check In","Check Out","Durasi")
+df_call = df %>% select("ID Call","Tanggal","Check In","Check Out","Durasi",
+                        # tambahan baru
+                        "Jenis MDS")
 
 # ====================================================================
 # ini adalah tambahan daripada request akhir taun
@@ -98,11 +101,13 @@ df_final =
          "Koordinat RO","Koordinat Call","Jarak (Meter)","Kesesuaian Titik","Peserta Display Wow Operator",
          "Peserta Loyalty Sachet","Project OTG","Nama Distributor","Kecamatan Distributor",
          "Project 1","Project 2","Check Out","Durasi","Brand","Category","Nama Item","Kode Item","Qty",
-         "Value","Firestart NS","Firestart Hilo","Status Sekolah") %>% 
+         "Value","Firestart NS","Firestart Hilo","Status Sekolah",
+         # tambahan baru
+         "Jenis MDS"
+         ) %>% 
   mutate("Status AV" = NA,
          "Berat(Gram)" = NA,
-         "Tipe Transaksi" = "Call",
-         "Jenis MDS" = NA) %>% 
+         "Tipe Transaksi" = "Call") %>% 
   relocate("Status AV",.after = "Value") %>% 
   relocate("Berat(Gram)",.after = "Status AV") %>% 
   relocate("Tipe Transaksi",.after = "Berat(Gram)") %>% 
@@ -134,5 +139,5 @@ for(ikanx in 1:length(data_jatim)){
 }
 
 # Menyimpan workbook ke file
-saveWorkbook(wb, file = "Hasil convert Order v2.xlsx",overwrite = T)
+saveWorkbook(wb, file = "Hasil convert Order v3.xlsx",overwrite = T)
 

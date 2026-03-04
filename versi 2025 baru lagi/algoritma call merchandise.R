@@ -11,7 +11,7 @@ library(expss)
 # mau mengajukan perubahan tipe data terkait kolom Check in, Check out dan Durasi ,,formatnya dibuat time,,
 
 # call
-nama_file_call = "Call sample.xlsx"
+nama_file_call = "Call (35) 1.xlsx"
 sht  = "Merchandise"
 df   = read_excel(nama_file_call,sheet = sht,col_types = "text")
 
@@ -41,7 +41,7 @@ df_2 =
          Status      = value) 
 
 # master item
-nama_file_master = "Master Item.xlsx"
+nama_file_master = "Master Item (7).xlsx"
 df_master = 
   read_excel(nama_file_master) |> 
   janitor::clean_names() |> 
@@ -77,7 +77,9 @@ df   = read_excel(nama_file_call,sheet = sht,col_types = "text")
 df$Tanggal = as.Date(as.numeric(df$Tanggal),origin = "1900-01-01")
 df$Tanggal = df$Tanggal - 2
 
-df_call = df %>% select("ID Call","Tanggal","Check In","Check Out","Durasi")
+df_call = df %>% select("ID Call","Tanggal","Check In","Check Out","Durasi",
+                        # tambahan baru
+                        "Jenis MDS")
 
 
 # ====================================================================
@@ -94,17 +96,8 @@ ubahin_waktu = function(tes){
   menit <- floor((detik_total %% 3600) / 60)
   detik <- round(detik_total %% 60)
   
-  # Format AM/PM
-  if (jam >= 12) {
-    periode <- "PM"
-    if (jam > 12) jam <- jam - 12
-  } else {
-    periode <- "AM"
-    if (jam == 0) jam <- 12
-  }
+  hasil <- sprintf("%d:%02d:%02d", jam, menit, detik)
   
-  hasil <- sprintf("%d:%02d:%02d %s", jam, menit, detik, 
-                   periode)
   # hasil
   return(hasil)
 }
@@ -148,8 +141,7 @@ df_finalista =
   mutate(Qty = NA,
          Value = NA,
          "Berat(Gram)" = NA,
-         "Tipe Transaksi" = "AV",
-         "Jenis MDS" = NA) %>% 
+         "Tipe Transaksi" = "AV") %>% 
   relocate("Qty",.after = "Kode Item") %>% 
   relocate("Value",.after = "Qty") %>%
   rename("Status AV" = Status) %>% 
@@ -181,5 +173,5 @@ for(ikanx in 1:length(data_jatim)){
 }
 
 # Menyimpan workbook ke file
-saveWorkbook(wb, file = "Hasil convert Merchandise v2.xlsx",overwrite = T)
+saveWorkbook(wb, file = "Hasil convert Merchandise v3.xlsx",overwrite = T)
 

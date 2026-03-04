@@ -11,7 +11,7 @@ library(expss)
 # mau mengajukan perubahan tipe data terkait kolom Check in, Check out dan Durasi ,,formatnya dibuat time,,
 
 # call
-nama_file_call = "Call (30).xlsx"
+nama_file_call = "Call (35) 1.xlsx"
 sht  = "TSachet"
 df   = read_excel(nama_file_call,sheet = sht,col_types = "text") %>% rename("ID Order" = IDdetail)
 
@@ -25,7 +25,7 @@ df =
   ungroup()
 
 # master item
-nama_file_master = "Master Item (4).xlsx"
+nama_file_master = "Master Item (7).xlsx"
 df_master = 
   read_excel(nama_file_master) |> 
   janitor::clean_names() |> 
@@ -50,8 +50,8 @@ df_final =
   ) %>% 
   mutate("Status AV" = NA,
          "Berat(Gram)" = NA,
-         "Tipe Transaksi" = "Call",
-         "Jenis MDS" = NA) %>% 
+         "Jenis MDS" = NA,
+         "Tipe Transaksi" = "Call") %>% 
   relocate("Status AV",.after = "Value") %>% 
   relocate("Berat(Gram)",.after = "Status AV") %>% 
   relocate("Tipe Transaksi",.after = "Berat(Gram)") %>% 
@@ -72,17 +72,7 @@ ubahin_waktu = function(tes){
   menit <- floor((detik_total %% 3600) / 60)
   detik <- round(detik_total %% 60)
   
-  # Format AM/PM
-  if (jam >= 12) {
-    periode <- "PM"
-    if (jam > 12) jam <- jam - 12
-  } else {
-    periode <- "AM"
-    if (jam == 0) jam <- 12
-  }
-  
-  hasil <- sprintf("%d:%02d:%02d %s", jam, menit, detik, 
-                   periode)
+  hasil <- sprintf("%d:%02d:%02d", jam, menit, detik)
   # hasil
   return(hasil)
 }

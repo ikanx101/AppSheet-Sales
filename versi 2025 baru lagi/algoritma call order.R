@@ -54,17 +54,7 @@ ubahin_waktu = function(tes){
   menit <- floor((detik_total %% 3600) / 60)
   detik <- round(detik_total %% 60)
   
-  # Format AM/PM
-  if (jam >= 12) {
-    periode <- "PM"
-    if (jam > 12) jam <- jam - 12
-  } else {
-    periode <- "AM"
-    if (jam == 0) jam <- 12
-  }
-  
-  hasil <- sprintf("%d:%02d:%02d %s", jam, menit, detik, 
-                   periode)
+  hasil <- sprintf("%d:%02d:%02d", jam, menit, detik)
   # hasil
   return(hasil)
 }
